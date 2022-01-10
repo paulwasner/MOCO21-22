@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "177012276629",
+    "project_id": "joinme-f75c5",
+    "storage_bucket": "joinme-f75c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177012276629:android:53d3fe2fb47073d8764a9c",
+        "android_client_info": {
+          "package_name": "com.example.joinme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177012276629-52d1dq3f3gvni14qh23a8t8t33pmlssp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJgwlNXyYv4iGNtqIAKciNJHcYJORuh_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177012276629-52d1dq3f3gvni14qh23a8t8t33pmlssp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
