@@ -7,48 +7,59 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.LoginActivity">
-    
-    <EditText
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:id="@+id/email"
-        android:hint="Email"
-        android:maxLines="1"
-        android:layout_marginStart="20dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="0dp"
-        android:autofillHints="emailAddress"
-        />
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="Hier anmeldem"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
 
     <EditText
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:id="@+id/password"
-        android:hint="Passwort"
-        android:maxLines="1"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:autofillHints="emailAddress"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
         android:paddingStart="20dp"
-        android:paddingEnd="0dp"
-        />
+        android:paddingEnd="0dp" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Passwort"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:paddingStart="20dp"
+        android:paddingEnd="0dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="40dp"
-        android:text="Login"
-        />
+        android:layout_marginEnd="20dp"
+        android:text="Login" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_marginTop="10dp">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,10 +67,10 @@
             android:text="Kein Account?" />
 
         <TextView
-            android:layout_marginStart="5dp"
             android:id="@+id/registerNowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:text="Jetzt Registrienten"
             android:textStyle="bold" />
     </LinearLayout>
