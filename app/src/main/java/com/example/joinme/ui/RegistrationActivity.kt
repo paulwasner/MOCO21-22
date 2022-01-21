@@ -17,10 +17,12 @@ import java.util.*
 
 class RegistrationActivity : AppCompatActivity() {
 
-    //Firebase Realtime-DB Referenz
-    val database = Firebase.database.reference
-
     lateinit var binding: ActivityRegistrationBinding
+
+    //Firebase
+    val database = FirebaseDatabase.getInstance("https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
+    val userRef = database.getReference("users")
+    val emailRef = database.getReference("emails")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,11 @@ class RegistrationActivity : AppCompatActivity() {
 
 
         registrationButton.setOnClickListener {
+
+            /*Toast.makeText(applicationContext, "Test", Toast.LENGTH_SHORT).show()
+            //Test DB-Write
+            dbRef.setValue("Test")*/
+
             //Benutzerdaten einlesen
             val firstnameTxt = firstname.text.toString()
             val lastnameTxt = lastname.text.toString()
@@ -48,69 +55,54 @@ class RegistrationActivity : AppCompatActivity() {
             val passwordConfTxt = passwordConf.text.toString()
 
             //Prüfen, ob alle Felder ausgefüllt wurden
-            if (firstnameTxt.isEmpty() ||
-                lastnameTxt.isEmpty() ||
-                emailTxt.isEmpty() ||
-                passwordTxt.isEmpty() ||
-                passwordConfTxt.isEmpty()
-            ) {
+            if (firstnameTxt.isEmpty() || lastnameTxt.isEmpty() || emailTxt.isEmpty() ||
+                passwordTxt.isEmpty() || passwordConfTxt.isEmpty() ) {
+
                 //Benutzer auf unausgefüllte Felder hinweisen
-                Toast.makeText(
-                    applicationContext,
-                    "Bitte alle Felder ausfüllen",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                Toast.makeText( applicationContext, "Bitte alle Felder ausfüllen",
+                    Toast.LENGTH_SHORT ).show()
             }
 
             //Passwörter überprüfen
             else if (passwordTxt != passwordConfTxt) {
-                Toast.makeText(
-                    applicationContext,
-                    "Passwörter stimmen nicht überein!",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                Toast.makeText( applicationContext, "Passwörter stimmen nicht überein!",
+                    Toast.LENGTH_SHORT ).show()
             }
 
             //Wenn keine Fehler in der Eingabe vorleigen
             else {
-                database.child("users").addListenerForSingleValueEvent( object : ValueEventListener {
+                //TODO deep querry
+                    //TODO User Objekt schreiben
+                emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        //Mail registriert?
+                        //Überprüfen, ob Email bereits existiert
                         if(snapshot.hasChild(emailTxt)) {
-                            Toast.makeText(applicationContext, "Mail bereits registriert", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "Email ist bereits registriert!",
+                                Toast.LENGTH_SHORT).show()
                         }
-                        else {
-                            database.child("users").child(emailTxt).child("first_name").setValue(firstnameTxt)
-                            database.child("users").child(emailTxt).child("last_name").setValue(lastnameTxt)
-                            database.child("users").child(emailTxt).child("email").setValue(emailTxt)
+                        else if ( !snapshot.hasChild(emailTxt) ){
+                            //UUID für neuen Nutzer generieren
+                            var uuid = UUID.randomUUID().toString()
 
-                            Toast.makeText( applicationContext, "Regestrierung erfolgreich", Toast.LENGTH_SHORT).show()
+                            userRef.child(uuid).child("email").setValue(emailTxt)
+                            userRef.child(uuid).child("first_name").setValue(firstnameTxt)
+                            userRef.child(uuid).child("last_name").setValue(lastnameTxt)
+                            userRef.child(uuid).child("password").setValue(passwordTxt)
+                            //Zuweisung Email zu UUID für besseres Querrying
+                            emailRef.child(emailTxt).setValue(uuid)
+
+                            //Benutzer über Registrierung informieren
+                            Toast.makeText(applicationContext, "User erfolgreich registriert",
+                                Toast.LENGTH_SHORT).show()
                             finish()
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+
                     }
 
-                } )
-
-                /*val uuid = UUID.randomUUID().toString()
-                Log.d("UUID: ", uuid)*/
-                //TODO UUID des Nutzers nach anmelden lokal speichern und an andere Activities / Fragments übergeben?
-
-
-
-                /*
-                //Eingaben an Datenbank senden
-                database.child("users").child(uuid).child("email").setValue(emailTxt)
-                database.child("users").child(uuid).child("first_name")
-                    .setValue(firstnameTxt)
-                database.child("users").child(uuid).child("last_name")
-                    .setValue(lastnameTxt)
-                database.child("users").child(uuid).child("password").setValue(password)*/
+                })
 
 
 
