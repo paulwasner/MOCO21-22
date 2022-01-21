@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.joinme.R
 import com.example.joinme.databinding.FragmentActivitiesBinding
 import com.example.joinme.datastructure.Activity
-import com.example.joinme.datastructure.Participants
+
 
 class ActivitiesFragment : Fragment() {
 
@@ -34,15 +34,14 @@ class ActivitiesFragment : Fragment() {
         val root: View = binding.root
         val activities =
             arrayOf(
-                Activity("Schwimmen gehen", Participants(1, 4), false),
-                Activity("Bowlen", Participants(1, 2), false),
-                Activity("Kinobesuch", Participants(1, 2), false),
-                Activity("Park", Participants(1, 2), false),
-                Activity("Grillen", Participants(1, 2), false),
-                Activity("Fitnessstudio", Participants(1, 2), false),
-                Activity("Programmieren", Participants(1, 2), false),
-                Activity("Lernen", Participants(1, 2), false),
-                Activity("Testen", Participants(1, 2), false)
+                Activity("Schwimmen gehen", false),
+                Activity("Bowlen", false),
+                Activity("Kinobesuch", false),
+                Activity("Park", false),
+                Activity("Grillen", false),
+                Activity("Fitnessstudio", false),
+                Activity("Programmieren", false),
+                Activity("Lernen", false)
             )
         val adapter = activity?.let { ActivityListAdapter(it, activities) }
 

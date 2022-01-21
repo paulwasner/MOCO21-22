@@ -44,14 +44,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/listtile_amount_participants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="1-4 Personen"
-            app:layout_constraintStart_toEndOf="@+id/listtile_image"
-            app:layout_constraintTop_toBottomOf="@id/listtile_title" />
 
         <Button
             android:id="@+id/listtile_button"

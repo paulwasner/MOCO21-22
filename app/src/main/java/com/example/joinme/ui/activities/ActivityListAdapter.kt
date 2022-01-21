@@ -24,13 +24,11 @@ class ActivityListAdapter(
         val activityName = rowView.findViewById<TextView>(R.id.listtile_title)
         val startActivityButton = rowView.findViewById<TextView>(R.id.listtile_button)
 
-        val amountParticipants = rowView.findViewById<TextView>(R.id.listtile_amount_participants)
 
         val image = rowView.findViewById<ImageView>(R.id.listtile_image)
         image.clipToOutline = true
 
         activityName.text = activities[position].activityName
-        amountParticipants.text = activities[position].participants.min.toString() + "-" + activities[position].participants.max + " Personen"
 
         return rowView
     }
