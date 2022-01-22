@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.example.joinme.MainActivity
 import com.example.joinme.R
 import com.example.joinme.databinding.ActivityLoginBinding
+import com.example.joinme.datastructure.User
 import com.example.joinme.ui.activities.ActivitiesFragment
 import com.example.joinme.ui.activities.ActivitiesViewModel
 import com.example.joinme.ui.activities.ActivityListAdapter
@@ -22,8 +23,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     //Firebase
-    val database =
-        FirebaseDatabase.getInstance("https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
+    val database = FirebaseDatabase.getInstance(
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
     val userRef = database.getReference("users")
     val emailRef = database.getReference("emails")
 
@@ -50,10 +51,10 @@ class LoginActivity : AppCompatActivity() {
                     applicationContext,
                     "Bitte Email und Passwort eingeben",
                     Toast.LENGTH_SHORT
-                )
-                    .show()
-            } else {
-                //Prüfen ob Nutzer existiert
+                ).show()
+            }
+            else {
+                //Prüfen ob Nutzer (Email) existiert
                 var uuid: String?
                 emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -73,11 +74,25 @@ class LoginActivity : AppCompatActivity() {
                                                 applicationContext, "Login erfolgreich!",
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                            //Aktuellen User holen
+                                            val currentUser = User(
+                                                snapshot.child(uuid!!).child("email").value as String?,
+                                                snapshot.child(uuid!!).child("password").value as String?,
+                                                snapshot.child(uuid!!).child("firstName").value as String?,
+                                                snapshot.child(uuid!!).child("lastName").value as String?,
+                                                snapshot.child(uuid!!).child("location").value as String?,
+                                                snapshot.child(uuid!!).child("activityState").value as String?,
+                                                snapshot.child(uuid!!).child("activityName").value as String?,
+                                                snapshot.child(uuid!!).child("friends").value as MutableList<String>?
+                                            )
+
                                             //Activities-Fragment öffnen
                                             val intent = Intent(
                                                 applicationContext,
                                                 MainActivity::class.java
                                             )
+                                            //User mit übergeben
+                                            intent.putExtra("currentUser", currentUser)
                                             startActivity(intent)
                                         } else {
                                             Toast.makeText(
@@ -97,6 +112,13 @@ class LoginActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+                        }
+                        else {
+                            //Benutzer existiert nicht
+                            Toast.makeText(
+                                applicationContext, "Email nicht registriert!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 
