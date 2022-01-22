@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.joinme.R
 import com.example.joinme.databinding.ActivityRegistrationBinding
+import com.example.joinme.datastructure.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -71,23 +72,23 @@ class RegistrationActivity : AppCompatActivity() {
 
             //Wenn keine Fehler in der Eingabe vorleigen
             else {
-                //TODO deep querry
-                    //TODO User Objekt schreiben
+                //Neues User-Objekt erstellen
+                val user = User( emailTxt, passwordTxt, firstnameTxt, lastnameTxt, "",
+                    "", "", mutableListOf() )
+
+                //Prüfen, ob Email registriert
                 emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        //Überprüfen, ob Email bereits existiert
-                        if(snapshot.hasChild(emailTxt)) {
+                        if(snapshot.hasChild(user.email!!)) {
                             Toast.makeText(applicationContext, "Email ist bereits registriert!",
                                 Toast.LENGTH_SHORT).show()
                         }
-                        else if ( !snapshot.hasChild(emailTxt) ){
+                        else if ( !snapshot.hasChild(user.email) ){
                             //UUID für neuen Nutzer generieren
-                            var uuid = UUID.randomUUID().toString()
+                            val uuid = UUID.randomUUID().toString()
+                            //User in DB einfügen
+                            userRef.child(uuid).setValue(user)
 
-                            userRef.child(uuid).child("email").setValue(emailTxt)
-                            userRef.child(uuid).child("first_name").setValue(firstnameTxt)
-                            userRef.child(uuid).child("last_name").setValue(lastnameTxt)
-                            userRef.child(uuid).child("password").setValue(passwordTxt)
                             //Zuweisung Email zu UUID für besseres Querrying
                             emailRef.child(emailTxt).setValue(uuid)
 
@@ -99,13 +100,9 @@ class RegistrationActivity : AppCompatActivity() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-
+                        //TODO
                     }
-
                 })
-
-
-
             }
         }
         //Falls Account bereits existiert, zum Login weiterleiten
