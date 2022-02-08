@@ -1,18 +1,14 @@
-package com.example.joinme.ui
+package com.example.joinme.ui.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import com.example.joinme.MainActivity
 import com.example.joinme.R
 import com.example.joinme.databinding.ActivityLoginBinding
 import com.example.joinme.datastructure.User
-import com.example.joinme.ui.activities.ActivitiesFragment
-import com.example.joinme.ui.activities.ActivitiesViewModel
-import com.example.joinme.ui.activities.ActivityListAdapter
+import com.example.joinme.ui.registration.RegistrationActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

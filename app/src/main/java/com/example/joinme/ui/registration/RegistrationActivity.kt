@@ -1,8 +1,7 @@
-package com.example.joinme.ui
+package com.example.joinme.ui.registration
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.example.joinme.R
 import com.example.joinme.databinding.ActivityRegistrationBinding
@@ -11,8 +10,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import java.util.*
 
 
