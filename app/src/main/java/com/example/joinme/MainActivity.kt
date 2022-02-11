@@ -2,6 +2,7 @@ package com.example.joinme
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -12,7 +13,7 @@ import com.example.joinme.databinding.ActivityMainBinding
 import com.example.joinme.datastructure.User
 
 class MainActivity : AppCompatActivity() {
-
+    private val sharedViewModel: SharedViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,5 +35,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val currentUser: User = intent.extras!!.get( "currentUser" ) as User
+        sharedViewModel.user = currentUser
     }
 }
