@@ -6,4 +6,5 @@
     <string name="activities">Activities</string>
     <string name="friends">Friends</string>
     <string name="add_friend">Add friend</string>
+    <string name="addFriend">Freund hinzufügen</string>
 </resources>
