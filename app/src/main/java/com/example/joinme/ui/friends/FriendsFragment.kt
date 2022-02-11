@@ -22,7 +22,10 @@ class FriendsFragment : Fragment() {
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val friendsViewModel: FriendsViewModel by viewModels()
-    private lateinit var binding: FragmentFriendsBinding
+
+    private var _binding: FragmentFriendsBinding? = null
+    private val binding get() = _binding!!
+
     private var user = User("","", "", "", "","", "", mutableListOf())
 
     // This property is only valid between onCreateView and
@@ -33,7 +36,7 @@ class FriendsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFriendsBinding.inflate(inflater, container, false)
+        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -51,5 +54,9 @@ class FriendsFragment : Fragment() {
         val adapter = activity?.let { FriendsListAdapter(it, friends) }
         val listView: ListView = binding.root.findViewById(R.id.friends_listview)
         listView.adapter = adapter
+
+        binding.btnAddFriend.setOnClickListener {
+            //TODO
+        }
     }
 }
