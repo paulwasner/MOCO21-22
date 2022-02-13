@@ -54,9 +54,5 @@ class FriendsFragment : Fragment() {
         val adapter = activity?.let { FriendsListAdapter(it, friends) }
         val listView: ListView = binding.root.findViewById(R.id.friends_listview)
         listView.adapter = adapter
-
-        binding.btnAddFriend.setOnClickListener {
-            //TODO
-        }
     }
 }
