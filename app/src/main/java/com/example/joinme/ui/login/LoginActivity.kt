@@ -83,13 +83,12 @@ class LoginActivity : AppCompatActivity() {
                                             )
 
                                             //Activities-Fragment öffnen
-                                            val intent = Intent(
-                                                applicationContext,
-                                                MainActivity::class.java
-                                            )
-                                            //User mit übergeben
-                                            intent.putExtra("currentUser", currentUser)
-                                            startActivity(intent)
+                                            Intent(applicationContext, MainActivity::class.java).also {
+                                                //User + UUID mit übergeben
+                                                it.putExtra("currentUser", currentUser)
+                                                it.putExtra("uuid", uuid)
+                                                startActivity(it)
+                                            }
                                         } else {
                                             Toast.makeText(
                                                 applicationContext, "Passwort falsch!",

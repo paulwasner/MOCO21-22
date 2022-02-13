@@ -5,4 +5,5 @@ import com.example.joinme.datastructure.User
 
 class SharedViewModel : ViewModel() {
     var user = User("", "", "", "", "", "", "", mutableListOf())
+    var uuid = ""
 }

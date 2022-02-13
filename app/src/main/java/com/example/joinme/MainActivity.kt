@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val currentUser: User = intent.extras!!.get( "currentUser" ) as User
+        val currentUser = intent.extras!!.get( "currentUser" ) as User
+        val uuid = intent.extras!!.get( "uuid" ) as String
         sharedViewModel.user = currentUser
+        sharedViewModel.uuid = uuid
     }
 }
