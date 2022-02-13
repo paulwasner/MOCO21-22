@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.joinme.SharedViewModel
+import com.example.joinme.databinding.FragmentFriendDetailBinding
 import com.example.joinme.databinding.FragmentFriendsBinding
 
 class FriendDetailFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private var _binding: FragmentFriendsBinding? = null
+    private var _binding: FragmentFriendDetailBinding? = null
     private val binding get() = _binding!!
 
 
@@ -24,14 +25,14 @@ class FriendDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
+        _binding = FragmentFriendDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnAddFriend.setOnClickListener {
+        binding.addButton.setOnClickListener {
             //TODO Aktuellen User holen (SharedViewModel)
             //TODO Prüfen, ob eingegebener Freund in DB existiert
                 //TODO Wenn ja, Freund zur Freundesliste hinzufügen (User aktuallisieren: SharedViewModel)

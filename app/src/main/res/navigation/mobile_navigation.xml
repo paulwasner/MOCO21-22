@@ -17,4 +17,9 @@
         android:name="com.example.joinme.ui.friends.FriendsFragment"
         android:label="Friends"
         tools:layout="@layout/fragment_friends" />
+    <fragment
+        android:id="@+id/navigation_friends_detail"
+        android:name="com.example.joinme.ui.friends.FriendDetailFragment"
+        android:label="Friends_detail"
+        tools:layout="@layout/fragment_friend_detail" />
 </navigation>
