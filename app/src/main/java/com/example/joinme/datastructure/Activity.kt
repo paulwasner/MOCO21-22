@@ -4,7 +4,11 @@ import java.io.Serializable
 
 class Activity(val activityName: String, var started: Boolean)
 
-class Friends(val id: Int, val name: String)
+class Friends(val id: String, val name: String) {
+    override fun toString(): String {
+        return "ID: $id | Name: $name"
+    }
+}
 
 data class User(
     val email: String? = null,
