@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.FragmentFriendDetailBinding
+import com.example.joinme.datastructure.Friends
 import com.example.joinme.datastructure.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -43,6 +44,7 @@ class FriendDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("LISTasdf", sharedViewModel.listOfFriends.toString())
 
         binding.addButton.setOnClickListener {
             //Aktuellen User + UUID holen
@@ -104,6 +106,8 @@ class FriendDetailFragment : Fragment() {
                                     userRef.child(uuid).setValue(updatedUser)
                                     //User in SharedViewModel updaten
                                     sharedViewModel.user = updatedUser
+                                    //ListOfFriends im sharedViewModel aktuallisieren
+                                    sharedViewModel.listOfFriends.add(Friends(friendId, newFriend))
                                     Toast.makeText(activity, "Freund \"$newFriend\" hinzugefügt", Toast.LENGTH_SHORT).show()
                                 }
                                 //Aus Fragment heraus wechesln
