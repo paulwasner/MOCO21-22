@@ -43,9 +43,9 @@ class FriendsFragment : Fragment() {
         user = sharedViewModel.user
         val friends =
             arrayOf(
-                Friends(30, user.firstName!!),
-                Friends(4, "Bob"),
-                Friends(27, "Test")
+                Friends("30", user.firstName!!),
+                Friends("4", "Bob"),
+                Friends("27", "Test")
             )
 
         val adapter = activity?.let { FriendsListAdapter(it, friends) }
