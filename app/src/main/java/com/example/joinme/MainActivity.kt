@@ -10,9 +10,20 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.joinme.databinding.ActivityMainBinding
+import com.example.joinme.datastructure.Friends
 import com.example.joinme.datastructure.User
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
+    //Firebase
+    val database = FirebaseDatabase.getInstance(
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
+    val userRef = database.getReference("users")
+    val emailRef = database.getReference("emails")
+
     private val sharedViewModel: SharedViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
@@ -38,5 +49,26 @@ class MainActivity : AppCompatActivity() {
         val uuid = intent.extras!!.get( "uuid" ) as String
         sharedViewModel.user = currentUser
         sharedViewModel.uuid = uuid
+
+        //Freundesliste laden
+        val friendsId = sharedViewModel.user.friends
+
+        friendsId?.forEach {
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val email = snapshot.child(it).child("email").value as String
+                    val id = it
+                    Log.d("LIST0", email)
+                    Log.d("LIST0", it)
+
+                    sharedViewModel.listOfFriends.add(Friends(id, email))
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }
+
     }
 }
