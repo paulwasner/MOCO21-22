@@ -37,17 +37,12 @@ class FriendsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //Angemeldeten User aus SharedViewModel holen
-        user = sharedViewModel.user
-        val friends =
-            arrayOf(
-                Friends("30", user.firstName!!),
-                Friends("4", "Bob"),
-                Friends("27", "Test")
-            )
+    override fun onStart() {
+        super.onStart()
+        //Freundesliste aus SharedViewModel holen + in Array<Friends> umwandeln
+        val friends: Array<Friends> = sharedViewModel.listOfFriends.toTypedArray()
 
+        //Anzeigen der Freundesliste
         val adapter = activity?.let { FriendsListAdapter(it, friends) }
         val listView: ListView = binding.root.findViewById(R.id.friends_listview)
         listView.adapter = adapter
