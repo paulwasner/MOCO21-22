@@ -23,7 +23,29 @@ class ActivityListAdapter(
 
         val activityName = rowView.findViewById<TextView>(R.id.listtile_title)
         val startActivityButton = rowView.findViewById<TextView>(R.id.listtile_button)
+        startActivityButton.setOnClickListener {
 
+            if(!activities[position].started && !checkActivityStarted()){
+                //Aktivität starten
+                startActivityButton.text = "Teilen beenden"
+                activities[position].started = true
+            }
+            else if(activities[position].started) {
+                //Aktivität beenden
+                startActivityButton.text = "Teilen starten"
+                activities[position].started = false
+            }
+            else {
+                //Wenn bereits eine Aktivität gestartet wurde -> Toast
+                Toast.makeText(context, "Es wurde bereits eine Aktivität gestartet", Toast.LENGTH_SHORT).show()
+            }
+            //TODO Standort Permission im Manifest
+            //TODO Standort Self-Check
+
+            //TODO Standort in DB schreiben, bzw. löschen
+            //TODO Top-Status aktuallisieren
+            //TODO fixe Buttongröße
+        }
 
         val image = rowView.findViewById<ImageView>(R.id.listtile_image)
         image.clipToOutline = true
@@ -31,6 +53,15 @@ class ActivityListAdapter(
         activityName.text = activities[position].activityName
 
         return rowView
+    }
+
+    //Prüfen, ob bereits eine Aktivität gestartet wurde
+    fun checkActivityStarted(): Boolean {
+        activities.forEach {
+            if(it.started)
+                return true
+        }
+        return false
     }
 }
 
