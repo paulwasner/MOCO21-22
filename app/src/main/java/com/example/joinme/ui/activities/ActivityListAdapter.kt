@@ -1,10 +1,13 @@
 package com.example.joinme.ui.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import com.example.joinme.R
 import com.example.joinme.datastructure.Activity as ActivityData
 
@@ -25,10 +28,19 @@ class ActivityListAdapter(
         val startActivityButton = rowView.findViewById<TextView>(R.id.listtile_button)
         startActivityButton.setOnClickListener {
 
+            val permissionGranted = PackageManager.PERMISSION_GRANTED == ContextCompat
+                        .checkSelfPermission( context, Manifest.permission.ACCESS_COARSE_LOCATION)
+
+
             if(!activities[position].started && !checkActivityStarted()){
-                //Aktivität starten
-                startActivityButton.text = "Teilen beenden"
-                activities[position].started = true
+                //Aktivität starten, wenn Permission gegeben ist
+                    if( permissionGranted ) {
+                        startActivityButton.text = "Teilen beenden"
+                        activities[position].started = true
+                    }
+                else {
+                    Toast.makeText(context, "Standort freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
+                    }
             }
             else if(activities[position].started) {
                 //Aktivität beenden
@@ -39,9 +51,6 @@ class ActivityListAdapter(
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
                 Toast.makeText(context, "Es wurde bereits eine Aktivität gestartet", Toast.LENGTH_SHORT).show()
             }
-            //TODO Standort Permission im Manifest
-            //TODO Standort Self-Check
-
             //TODO Standort in DB schreiben, bzw. löschen
             //TODO Top-Status aktuallisieren
             //TODO fixe Buttongröße
