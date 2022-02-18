@@ -58,4 +58,5 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.0.3')
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation("androidx.fragment:fragment-ktx:1.4.1")
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 }
