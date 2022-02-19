@@ -1,17 +1,11 @@
 package com.example.joinme.ui.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.pm.PackageManager
-import android.location.Location
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import com.example.joinme.R
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.example.joinme.datastructure.Activity as ActivityData
 
 
