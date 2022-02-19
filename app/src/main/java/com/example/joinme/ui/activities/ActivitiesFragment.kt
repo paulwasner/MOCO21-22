@@ -96,58 +96,38 @@ class ActivitiesFragment : Fragment() {
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
-    fun itemClickListener( view: View, activities: Array<Activity>, position: Int ) {
-        val startActivityButton = view.findViewById<Button>(R.id.listtile_button)
+    fun itemClickListener(button: Button, activities: Array<Activity>, position: Int) {
 
         var lastLocation: Location? = null
-        val fusedLocationClient: FusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient( requireContext() )
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
+        val fusedLocationClient: FusedLocationProviderClient = LocationServices
+            .getFusedLocationProviderClient(requireContext())
+
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 lastLocation = location
             }
 
-        startActivityButton.setOnClickListener {
-            val permissionGranted = PackageManager.PERMISSION_GRANTED == ContextCompat
-                .checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-
-
+        button.setOnClickListener {
             if (!activities[position].started && !checkActivityStarted(activities)) {
                 //Aktivität starten, wenn Permission gegeben ist
-                if (permissionGranted && lastLocation != null) {
-                    startActivityButton.text = "Teilen beenden"
+                if (checkLocationPermission() && lastLocation != null) {
+                    button.text = "Teilen beenden"
                     activities[position].started = true
 
-                    Toast.makeText(
-                        context,
-                        "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else if (permissionGranted) {
+                    Toast.makeText(context, "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}", Toast.LENGTH_SHORT).show()
+                } else if (checkLocationPermission()) {
                     //Permisson granted aber kein Zugriff auf letzten Standort
-                    Toast.makeText(
-                        context,
-                        "Der letzte bekannte Standort kann nicht abgerufen werden!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(context,"Der letzte bekannte Standort kann nicht abgerufen werden!",Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(context, "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
                 }
             } else if (activities[position].started) {
                 //Aktivität beenden
-                startActivityButton.text = "Teilen starten"
+                button.text = "Teilen starten"
                 activities[position].started = false
             } else {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
-                Toast.makeText(
-                    context,
-                    "Es wurde bereits eine Aktivität gestartet",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context,"Es wurde bereits eine Aktivität gestartet",Toast.LENGTH_SHORT).show()
             }
-            //TODO Button funktioniert erst beim zweiten Klick
             //TODO Standort in DB schreiben, bzw. löschen
             //TODO Top-Status aktuallisieren
             //TODO fixe Buttongröße
