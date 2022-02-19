@@ -13,22 +13,31 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.joinme.R
+import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.FragmentActivitiesBinding
 import com.example.joinme.datastructure.Activity
+import com.example.joinme.datastructure.User
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.database.FirebaseDatabase
 
 
 class ActivitiesFragment : Fragment() {
 
-    private lateinit var activitiesViewModel: ActivitiesViewModel
-    private var _binding: FragmentActivitiesBinding? = null
+    //Firebase
+    val database = FirebaseDatabase.getInstance(
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
+    val userRef = database.getReference("users")
+    val emailRef = database.getReference("emails")
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private lateinit var activitiesViewModel: ActivitiesViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private var _binding: FragmentActivitiesBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -108,8 +117,16 @@ class ActivitiesFragment : Fragment() {
 
         button.setOnClickListener {
             if (!activities[position].started && !checkActivityStarted(activities)) {
-                //Aktivität starten, wenn Permission gegeben ist
                 if (checkLocationPermission() && lastLocation != null) {
+                    //Aktivität starten, wenn Permission gegeben ist
+                    val locationString = "${lastLocation!!.latitude}, ${lastLocation!!.longitude}"
+                    val user = sharedViewModel.user
+                    val updatedUser = User(user.email, user.password, user.firstName, user.lastName, locationString, true.toString(), activities[position].activityName, user.friends)
+
+                    //User in DB updaten
+                    userRef.child(sharedViewModel.uuid).setValue(updatedUser)
+
+                    //Button + Activity updaten
                     button.text = "Teilen beenden"
                     activities[position].started = true
 
@@ -122,6 +139,12 @@ class ActivitiesFragment : Fragment() {
                 }
             } else if (activities[position].started) {
                 //Aktivität beenden
+                val user = sharedViewModel.user
+                val updatedUser = User(user.email, user.password, user.firstName, user.lastName, "", false.toString(), "", user.friends)
+
+                //User in DB updaten
+                userRef.child(sharedViewModel.uuid).setValue(updatedUser)
+
                 button.text = "Teilen starten"
                 activities[position].started = false
             } else {
@@ -129,6 +152,7 @@ class ActivitiesFragment : Fragment() {
                 Toast.makeText(context,"Es wurde bereits eine Aktivität gestartet",Toast.LENGTH_SHORT).show()
             }
             //TODO Standort in DB schreiben, bzw. löschen
+            //TODO beim Start bereits gestartete aktivität laden
             //TODO Top-Status aktuallisieren
             //TODO fixe Buttongröße
         }
