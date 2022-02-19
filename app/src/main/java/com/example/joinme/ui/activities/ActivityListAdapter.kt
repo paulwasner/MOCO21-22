@@ -18,6 +18,7 @@ import com.example.joinme.datastructure.Activity as ActivityData
 class ActivityListAdapter(
     private val context: Activity,
     private val activities: Array<ActivityData>,
+    private val fragment: ActivitiesFragment
 ) :
     ArrayAdapter<ActivityData>(context, R.layout.activities_listtile, activities) {
 
@@ -27,50 +28,12 @@ class ActivityListAdapter(
         val rowView = inflater.inflate(R.layout.activities_listtile, null, true)
 
         val activityName = rowView.findViewById<TextView>(R.id.listtile_title)
-        val startActivityButton = rowView.findViewById<TextView>(R.id.listtile_button)
-
-        var lastLocation: Location? = null
-        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
-                // Got last known location. In some rare situations this can be null.
-                lastLocation = location
-            }
+        val startActivityButton = rowView.findViewById<Button>(R.id.listtile_button)
 
         startActivityButton.setOnClickListener {
-            val permissionGranted = PackageManager.PERMISSION_GRANTED == ContextCompat
-                        .checkSelfPermission( context, Manifest.permission.ACCESS_COARSE_LOCATION)
-
-
-            if(!activities[position].started && !checkActivityStarted()){
-                //Aktivität starten, wenn Permission gegeben ist
-                if( permissionGranted && lastLocation != null ) {
-                    startActivityButton.text = "Teilen beenden"
-                    activities[position].started = true
-
-                    Toast.makeText(context, "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}", Toast.LENGTH_SHORT).show()
-                }
-                else if( permissionGranted ){
-                    //Permisson granted aber kein Zugriff auf letzten Standort
-                    Toast.makeText(context, "Der letzte bekannte Standort kann nicht abgerufen werden!", Toast.LENGTH_SHORT).show()
-                }
-                else {
-                    Toast.makeText(context, "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
-                    }
-            }
-            else if(activities[position].started) {
-                //Aktivität beenden
-                startActivityButton.text = "Teilen starten"
-                activities[position].started = false
-            }
-            else {
-                //Wenn bereits eine Aktivität gestartet wurde -> Toast
-                Toast.makeText(context, "Es wurde bereits eine Aktivität gestartet", Toast.LENGTH_SHORT).show()
-            }
-            //TODO Standort in DB schreiben, bzw. löschen
-            //TODO Top-Status aktuallisieren
-            //TODO fixe Buttongröße
+            fragment.itemClickListener( rowView, activities, position )
         }
+
 
         val image = rowView.findViewById<ImageView>(R.id.listtile_image)
         image.clipToOutline = true
@@ -78,15 +41,6 @@ class ActivityListAdapter(
         activityName.text = activities[position].activityName
 
         return rowView
-    }
-
-    //Prüfen, ob bereits eine Aktivität gestartet wurde
-    fun checkActivityStarted(): Boolean {
-        activities.forEach {
-            if(it.started)
-                return true
-        }
-        return false
     }
 }
 
