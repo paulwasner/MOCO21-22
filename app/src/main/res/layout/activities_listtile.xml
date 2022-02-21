@@ -44,14 +44,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-
         <Button
             android:id="@+id/listtile_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="0dp"
-            android:backgroundTint="#545251"
             android:layout_marginTop="-5dp"
+            android:backgroundTint="@color/grey"
+            android:minHeight="0dp"
             android:text="TEILEN STARTEN"
             android:textAllCaps="false"
             android:textColor="@android:color/white"

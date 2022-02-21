@@ -128,6 +128,7 @@ class ActivitiesFragment : Fragment() {
 
                     //Button + Activity updaten
                     button.text = getString(R.string.sharing_stop)
+                    button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
                     activities[position].started = true
 
                     //Top-Status updaten
@@ -150,6 +151,7 @@ class ActivitiesFragment : Fragment() {
 
                 //Button updaten
                 button.text = getString(R.string.sharing_start)
+                button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey))
                 activities[position].started = false
 
                 //Top-Status updaten
@@ -158,7 +160,6 @@ class ActivitiesFragment : Fragment() {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
                 Toast.makeText(context,"Es wurde bereits eine Aktivität gestartet",Toast.LENGTH_SHORT).show()
             }
-            //TODO Top-Status aktuallisieren
         }
     }
 
