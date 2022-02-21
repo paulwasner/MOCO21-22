@@ -24,6 +24,7 @@ class ActivityListAdapter(
         val activityName = rowView.findViewById<TextView>(R.id.listtile_title)
         val startActivityButton = rowView.findViewById<Button>(R.id.listtile_button)
 
+        fragment.updateButtonOnStartUp( startActivityButton, activities, position )
         fragment.itemClickListener( startActivityButton, activities, position )
 
         val image = rowView.findViewById<ImageView>(R.id.listtile_image)
