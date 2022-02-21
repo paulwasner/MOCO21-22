@@ -50,18 +50,7 @@ class MainActivity : AppCompatActivity() {
         sharedViewModel.uuid = uuid
 
         //ActivityList updaten
-        if (sharedViewModel.user.activityState == true.toString()) {
-            sharedViewModel.activityArray.forEach {
-                if (it.activityName == sharedViewModel.user.activityName) {
-                    it.started = true
-                    //Top-Status updaten
-                    val topStatus: TextView = findViewById(R.id.top_status_info)
-                    topStatus.text = it.activityName
-                }
-            }
-        }
-
-
+        uptateTopStaus()
         //Freundesliste laden
         val friendsId = sharedViewModel.user.friends
 
@@ -82,4 +71,18 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun uptateTopStaus() {
+        if (sharedViewModel.user.activityState == true.toString()) {
+            sharedViewModel.activityArray.forEach {
+                if (it.activityName == sharedViewModel.user.activityName) {
+                    it.started = true
+                    //Top-Status updaten
+                    val topStatus: TextView = findViewById(R.id.top_status_info)
+                    topStatus.text = it.activityName
+                }
+            }
+        }
+    }
+
 }
