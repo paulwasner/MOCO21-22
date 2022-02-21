@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         sharedViewModel.uuid = uuid
 
         //ActivityList updaten
-        updateTopStaus()
+        updateTopStatus()
         //Freundesliste laden
         val friendsId = sharedViewModel.user.friends
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun updateTopStaus() {
+    private fun updateTopStatus() {
         if (sharedViewModel.user.activityState == true.toString()) {
             sharedViewModel.activityArray.forEach {
                 if (it.activityName == sharedViewModel.user.activityName) {
