@@ -63,45 +63,14 @@ class ActivitiesFragment : Fragment() {
 
         topInfo = view.findViewById(R.id.top_status_info)
 
-        if (!checkLocationPermission()) {
-            requestLocationPermission()
-        }
+       if (!activitiesViewModel.checkLocationPermission(requireContext())) {
+            activitiesViewModel.requestLocationPermission(this)
+       }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun checkLocationPermission(): Boolean {
-        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-    }
-
-    private fun requestLocationPermission() {
-        val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission())
-            { isGranted: Boolean ->
-                if (isGranted) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Standort-Zugriff")
-                        .setMessage("Der Standort-Zugriff wurde erteilt.")
-                        .setCancelable(true)
-                        .show()
-                } else {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Standort-Zugriff")
-                        .setMessage(
-                            "Der Standort-Zugriff wurde verweigert.\r\n" +
-                                    "Um eine Aktivität starten zu können, muss der " +
-                                    "Standort-Zugriff erlaubt werden."
-                        )
-                        .setCancelable(true)
-                        .show()
-                }
-            }
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
     fun updateButtonOnStartUp(button: Button, activities: Array<Activity>, position: Int) {
@@ -126,7 +95,7 @@ class ActivitiesFragment : Fragment() {
 
         button.setOnClickListener {
             if (!activities[position].started && !checkActivityStarted(activities)) {
-                if (checkLocationPermission() && lastLocation != null) {
+                if (activitiesViewModel.checkLocationPermission(requireContext()) && lastLocation != null) {
                     //Aktivität starten, wenn Permission gegeben ist
                     val locationString = "${lastLocation!!.latitude}, ${lastLocation!!.longitude}"
                     val user = sharedViewModel.user
@@ -148,7 +117,7 @@ class ActivitiesFragment : Fragment() {
                     Toast.makeText(context,
                         "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}",
                         Toast.LENGTH_SHORT).show()
-                } else if (checkLocationPermission()) {
+                } else if (activitiesViewModel.checkLocationPermission(requireContext())) {
                     //Permisson granted aber kein Zugriff auf letzten Standort
                     Toast.makeText(context,
                         "Der letzte bekannte Standort kann nicht abgerufen werden!",
