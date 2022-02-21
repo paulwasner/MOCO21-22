@@ -10,4 +10,21 @@
     <string name="sharing_stop">TEILEN BEENDEN</string>
     <string name="sharing_start">TEILEN STARTEN</string>
     <string name="no_activity_shared">Du hast noch keine Aktivität geteilt</string>
+    <string name="content_description_activityimage">ActivityImage</string>
+    <string name="login_here">Hier anmeldem</string>
+    <string name="login">Login</string>
+    <string name="question_no_account">Kein Account?</string>
+    <string name="register_now">Jetzt Registrienten</string>
+    <string name="email">Email</string>
+    <string name="password">Passwort</string>
+    <string name="register_here">Hier registrieren</string>
+    <string name="firstname">Vorname</string>
+    <string name="lastname">Nachname</string>
+    <string name="repeat_password">Passwort wiederholen</string>
+    <string name="register">Registrieren</string>
+    <string name="question_own_an_accout">Bereits ein Account?</string>
+    <string name="login_now">Jetzt Anmelden</string>
+    <string name="add">Hinzufügen</string>
+    <string name="email_username">Email / Benutzername</string>
+    <string name="details">DETAILS</string>
 </resources>

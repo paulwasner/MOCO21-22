@@ -14,22 +14,22 @@
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="40dp"
-        android:src="@drawable/pool"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:scaleType="centerCrop"
         android:background="@drawable/listtile_border"
         android:clipToOutline="true"
-        />
+        android:contentDescription="@string/content_description_activityimage"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pool"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:text="Schwimmen gehen"
+        tools:text="Schwimmen gehen"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/imageView"

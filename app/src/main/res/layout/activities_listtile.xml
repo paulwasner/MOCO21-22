@@ -25,20 +25,20 @@
             android:id="@+id/listtile_image"
             android:layout_width="50dp"
             android:layout_height="40dp"
-            android:src="@drawable/pool"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:scaleType="centerCrop"
             android:background="@drawable/listtile_border"
             android:clipToOutline="true"
-            />
+            android:contentDescription="@string/content_description_activityimage"
+            android:scaleType="centerCrop"
+            android:src="@drawable/pool"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/listtile_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Schwimmen gehen"
+            tools:text="Schwimmen gehen"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/listtile_image"
@@ -52,12 +52,13 @@
             android:layout_marginTop="-5dp"
             android:backgroundTint="@color/grey"
             android:minHeight="0dp"
-            android:text="TEILEN STARTEN"
+            android:text="@string/sharing_start"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

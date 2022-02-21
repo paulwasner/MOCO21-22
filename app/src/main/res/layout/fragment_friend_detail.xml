@@ -26,12 +26,13 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:autofillHints="emailAddress"
-        android:hint="Email / Benutzername"
+        android:hint="@string/email_username"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:minHeight="48dp"
         android:paddingStart="20dp"
-        android:paddingEnd="0dp" />
+        android:paddingEnd="0dp"
+        tools:ignore="TextContrastCheck" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/addButton"
@@ -40,6 +41,6 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="20dp"
-            android:text="Hinzufügen" />
+            android:text="@string/add" />
 
     </LinearLayout>
