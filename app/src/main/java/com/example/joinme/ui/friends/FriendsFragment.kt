@@ -15,6 +15,7 @@ import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.FragmentFriendsBinding
 import com.example.joinme.datastructure.Friends
 import com.example.joinme.datastructure.User
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -77,5 +78,38 @@ class FriendsFragment : Fragment() {
             }
 
         })
+    }
+
+    fun onClickListener(friendDetailButton: TextView, friends: Array<Friends>, position: Int) {
+
+        friendDetailButton.setOnClickListener {
+            userRef.addListenerForSingleValueEvent( object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val location = snapshot.child(friends[position].id).child("location").value as String
+                    val activityName = snapshot.child(friends[position].id).child("activityName").value as String
+                    val activityState = snapshot.child(friends[position].id).child("activityState").value
+
+                    if( activityState == true.toString() ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(friends[position].name)
+                            .setMessage("Aktivität: $activityName\r\n" +
+                                    "Standort: $location")
+                            .setCancelable(true)
+                            .show()
+                    }
+                    else {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(friends[position].name)
+                            .setMessage("Keine Aktivität aktiv!")
+                            .setCancelable(true)
+                            .show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }
     }
 }

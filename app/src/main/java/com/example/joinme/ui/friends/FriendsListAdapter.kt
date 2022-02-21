@@ -29,6 +29,7 @@ class FriendsListAdapter (
 
         friendsName.text = friends[position].name
         fragment.checkActivityState( friendDetailButton, friends, position )
+        fragment.onClickListener( friendDetailButton, friends, position )
 
 
         return rowView
