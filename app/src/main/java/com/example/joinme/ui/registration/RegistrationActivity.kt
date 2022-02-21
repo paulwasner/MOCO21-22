@@ -71,7 +71,7 @@ class RegistrationActivity : AppCompatActivity() {
             else {
                 //Neues User-Objekt erstellen
                 val user = User( emailTxt, passwordTxt, firstnameTxt, lastnameTxt, "",
-                    "", "", mutableListOf() )
+                    "false", "", mutableListOf() )
 
                 //Prüfen, ob Email registriert
                 emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
