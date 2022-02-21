@@ -115,6 +115,11 @@ class ActivitiesFragment : Fragment() {
                 lastLocation = location
             }
 
+        //Update button color
+        if( activities[position].started ) {
+            button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
+        }
+
         button.setOnClickListener {
             if (!activities[position].started && !checkActivityStarted(activities)) {
                 if (checkLocationPermission() && lastLocation != null) {
