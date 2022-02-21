@@ -26,13 +26,13 @@ class ActivitiesViewModel : ViewModel() {
     }
     val text: LiveData<String> = _text
 
-    fun checkLocationPermission( context: Context ): Boolean {
+    fun checkLocationPermission(context: Context): Boolean {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
             context, Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
 
-    fun requestLocationPermission( fragment: ActivitiesFragment ) {
+    fun requestLocationPermission(fragment: ActivitiesFragment) {
         val requestPermissionLauncher =
             fragment.registerForActivityResult(ActivityResultContracts.RequestPermission())
             { isGranted: Boolean ->
@@ -57,7 +57,12 @@ class ActivitiesViewModel : ViewModel() {
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
-    fun buttonClickListener(button: Button, activities: Array<Activity>, position: Int, fragment: ActivitiesFragment ){
+    fun buttonClickListener(
+        button: Button,
+        activities: Array<Activity>,
+        position: Int,
+        fragment: ActivitiesFragment
+    ) {
         val context = fragment.requireContext()
         val sharedViewModel = fragment.sharedViewModel
         val userRef = fragment.userRef
@@ -105,8 +110,8 @@ class ActivitiesViewModel : ViewModel() {
                         "Der letzte bekannte Standort kann nicht abgerufen werden!",
                         Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context,
-                        "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"Standort-Freigabe nicht erteilt!",
+                        Toast.LENGTH_SHORT).show()
                 }
             } else if (activities[position].started) {
                 //Aktivität beenden
