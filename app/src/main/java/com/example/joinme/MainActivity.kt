@@ -50,6 +50,18 @@ class MainActivity : AppCompatActivity() {
         sharedViewModel.user = currentUser
         sharedViewModel.uuid = uuid
 
+        //ActivityList updaten
+        if( sharedViewModel.user.activityState == true.toString() ) {
+            sharedViewModel.activityArray.forEach {
+                if( it.activityName == sharedViewModel.user.activityName ) {
+                    it.started = true
+                }
+                Log.d("ACTIVITY0", "${it.activityName}, ${it.started}")
+            }
+        }
+
+
+
         //Freundesliste laden
         val friendsId = sharedViewModel.user.friends
 
@@ -58,9 +70,6 @@ class MainActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val email = snapshot.child(it).child("email").value as String
                     val id = it
-                    Log.d("LIST0", email)
-                    Log.d("LIST0", it)
-
                     sharedViewModel.listOfFriends.add(Friends(id, email))
                 }
 
