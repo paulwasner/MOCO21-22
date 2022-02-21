@@ -21,9 +21,9 @@ import com.google.firebase.database.ValueEventListener
 class MainActivity : AppCompatActivity() {
     //Firebase
     val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
+    )
     val userRef = database.getReference("users")
-    val emailRef = database.getReference("emails")
 
     private val sharedViewModel: SharedViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
@@ -39,31 +39,27 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
         val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard
-            )
+            setOf(R.id.navigation_home, R.id.navigation_dashboard)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val currentUser = intent.extras!!.get( "currentUser" ) as User
-        val uuid = intent.extras!!.get( "uuid" ) as String
+        val currentUser = intent.extras!!.get("currentUser") as User
+        val uuid = intent.extras!!.get("uuid") as String
         sharedViewModel.user = currentUser
         sharedViewModel.uuid = uuid
 
         //ActivityList updaten
-        if( sharedViewModel.user.activityState == true.toString() ) {
+        if (sharedViewModel.user.activityState == true.toString()) {
             sharedViewModel.activityArray.forEach {
-                if( it.activityName == sharedViewModel.user.activityName ) {
+                if (it.activityName == sharedViewModel.user.activityName) {
                     it.started = true
                     //Top-Status updaten
                     val topStatus: TextView = findViewById(R.id.top_status_info)
                     topStatus.text = it.activityName
                 }
-                Log.d("ACTIVITY0", "${it.activityName}, ${it.started}")
             }
         }
-
 
 
         //Freundesliste laden
