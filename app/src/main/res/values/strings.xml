@@ -7,4 +7,6 @@
     <string name="friends">Friends</string>
     <string name="add_friend">Add friend</string>
     <string name="addFriend">Freund hinzufügen</string>
+    <string name="sharing_stop">TEILEN BEENDEN</string>
+    <string name="sharing_start">TEILEN STARTEN</string>
 </resources>

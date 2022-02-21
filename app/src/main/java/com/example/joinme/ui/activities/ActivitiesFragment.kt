@@ -98,7 +98,7 @@ class ActivitiesFragment : Fragment() {
 
     fun updateButtonOnStartUp( button: Button, activities: Array<Activity>, position: Int ) {
         if(activities[position].started) {
-            button.text = "Teilen beenden"
+            button.text = getString(R.string.sharing_stop)
         }
     }
 
@@ -124,7 +124,7 @@ class ActivitiesFragment : Fragment() {
                     userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
                     //Button + Activity updaten
-                    button.text = "Teilen beenden"
+                    button.text = getString(R.string.sharing_stop)
                     activities[position].started = true
 
                     Toast.makeText(context, "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}", Toast.LENGTH_SHORT).show()
@@ -142,14 +142,13 @@ class ActivitiesFragment : Fragment() {
                 //User in DB updaten
                 userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
-                button.text = "Teilen starten"
+                button.text = getString(R.string.sharing_start)
                 activities[position].started = false
             } else {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
                 Toast.makeText(context,"Es wurde bereits eine Aktivität gestartet",Toast.LENGTH_SHORT).show()
             }
             //TODO Top-Status aktuallisieren
-            //TODO fixe Buttongröße
         }
     }
 
