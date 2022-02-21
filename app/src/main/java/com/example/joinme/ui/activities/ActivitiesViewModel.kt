@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.joinme.R
+import com.example.joinme.SharedViewModel
 import com.example.joinme.datastructure.Activity
 import com.example.joinme.datastructure.User
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -57,9 +58,13 @@ class ActivitiesViewModel : ViewModel() {
     }
 
     fun buttonClickListener(button: Button, activities: Array<Activity>, position: Int, fragment: ActivitiesFragment ){
+        val context = fragment.requireContext()
+        val sharedViewModel = fragment.sharedViewModel
+        val userRef = fragment.userRef
+
         var lastLocation: Location? = null
         val fusedLocationClient: FusedLocationProviderClient = LocationServices
-            .getFusedLocationProviderClient(fragment.requireContext())
+            .getFusedLocationProviderClient(context)
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             lastLocation = location
@@ -67,61 +72,61 @@ class ActivitiesViewModel : ViewModel() {
 
         //Update button color
         if (activities[position].started) {
-            button.setBackgroundColor(ContextCompat.getColor(fragment.requireContext(), R.color.green))
+            button.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
         }
 
         button.setOnClickListener {
             if (!activities[position].started && !checkActivityStarted(activities)) {
-                if (checkLocationPermission(fragment.requireContext()) && lastLocation != null) {
+                if (checkLocationPermission(context) && lastLocation != null) {
                     //Aktivität starten, wenn Permission gegeben ist
                     val locationString = "${lastLocation!!.latitude}, ${lastLocation!!.longitude}"
-                    val user = fragment.sharedViewModel.user
+                    val user = sharedViewModel.user
                     val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
                         locationString, true.toString(), activities[position].activityName,
                         user.friends)
 
                     //User in DB updaten
-                    fragment.userRef.child(fragment.sharedViewModel.uuid).setValue(updatedUser)
+                    userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
                     //Button + Activity updaten
                     button.text = fragment.getString(R.string.sharing_stop)
-                    button.setBackgroundColor(ContextCompat.getColor(fragment.requireContext(), R.color.green))
+                    button.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
                     activities[position].started = true
 
                     //Top-Status updaten
                     fragment.topInfo.text = activities[position].activityName
 
-                    Toast.makeText(fragment.context,
+                    Toast.makeText(context,
                         "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}",
                         Toast.LENGTH_SHORT).show()
-                } else if (checkLocationPermission(fragment.requireContext())) {
+                } else if (checkLocationPermission(context)) {
                     //Permisson granted aber kein Zugriff auf letzten Standort
-                    Toast.makeText(fragment.context,
+                    Toast.makeText(context,
                         "Der letzte bekannte Standort kann nicht abgerufen werden!",
                         Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(fragment.context,
+                    Toast.makeText(context,
                         "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
                 }
             } else if (activities[position].started) {
                 //Aktivität beenden
-                val user = fragment.sharedViewModel.user
+                val user = sharedViewModel.user
                 val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
                     "", false.toString(), "", user.friends)
 
                 //User in DB updaten
-                fragment.userRef.child(fragment.sharedViewModel.uuid).setValue(updatedUser)
+                userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
                 //Button updaten
                 button.text = fragment.getString(R.string.sharing_start)
-                button.setBackgroundColor(ContextCompat.getColor(fragment.requireContext(), R.color.grey))
+                button.setBackgroundColor(ContextCompat.getColor(context, R.color.grey))
                 activities[position].started = false
 
                 //Top-Status updaten
                 fragment.topInfo.text = fragment.getString(R.string.no_activity_shared)
             } else {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
-                Toast.makeText(fragment.context, "Es wurde bereits eine Aktivität gestartet",
+                Toast.makeText(context, "Es wurde bereits eine Aktivität gestartet",
                     Toast.LENGTH_SHORT).show()
             }
         }
