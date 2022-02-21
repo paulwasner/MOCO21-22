@@ -130,62 +130,38 @@ class ActivitiesFragment : Fragment() {
                     //Aktivität starten, wenn Permission gegeben ist
                     val locationString = "${lastLocation!!.latitude}, ${lastLocation!!.longitude}"
                     val user = sharedViewModel.user
-                    val updatedUser = User(
-                        user.email,
-                        user.password,
-                        user.firstName,
-                        user.lastName,
-                        locationString,
-                        true.toString(),
-                        activities[position].activityName,
-                        user.friends
-                    )
+                    val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
+                        locationString, true.toString(), activities[position].activityName,
+                        user.friends)
 
                     //User in DB updaten
                     userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
                     //Button + Activity updaten
                     button.text = getString(R.string.sharing_stop)
-                    button.setBackgroundColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.green
-                        )
-                    )
+                    button.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.green))
                     activities[position].started = true
 
                     //Top-Status updaten
                     topInfo.text = activities[position].activityName
 
-                    Toast.makeText(
-                        context,
+                    Toast.makeText(context,
                         "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        Toast.LENGTH_SHORT).show()
                 } else if (checkLocationPermission()) {
                     //Permisson granted aber kein Zugriff auf letzten Standort
-                    Toast.makeText(
-                        context,
+                    Toast.makeText(context,
                         "Der letzte bekannte Standort kann nicht abgerufen werden!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(context,
+                        "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
                 }
             } else if (activities[position].started) {
                 //Aktivität beenden
                 val user = sharedViewModel.user
-                val updatedUser = User(
-                    user.email,
-                    user.password,
-                    user.firstName,
-                    user.lastName,
-                    "",
-                    false.toString(),
-                    "",
-                    user.friends
-                )
+                val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
+                    "", false.toString(), "", user.friends)
 
                 //User in DB updaten
                 userRef.child(sharedViewModel.uuid).setValue(updatedUser)
@@ -199,11 +175,8 @@ class ActivitiesFragment : Fragment() {
                 topInfo.text = getString(R.string.no_activity_shared)
             } else {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
-                Toast.makeText(
-                    context,
-                    "Es wurde bereits eine Aktivität gestartet",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context, "Es wurde bereits eine Aktivität gestartet",
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }
