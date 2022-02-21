@@ -1,7 +1,6 @@
 package com.example.joinme.ui.friends
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,11 +27,6 @@ class FriendDetailFragment : Fragment() {
     private var _binding: FragmentFriendDetailBinding? = null
     private val binding get() = _binding!!
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +38,6 @@ class FriendDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("LISTasdf", sharedViewModel.listOfFriends.toString())
 
         binding.addButton.setOnClickListener {
             //Aktuellen User + UUID holen
@@ -65,9 +58,6 @@ class FriendDetailFragment : Fragment() {
             listOfFriends?.forEach {
                     newFriendsList.add(it)
             }
-            Log.d("LIST1", listOfFriends.toString())
-            Log.d("LIST2", newFriendsList.toString())
-
             //Prüfen, ob eingegebener Freund in DB existiert
             when {
                 newFriend.isEmpty() -> {
