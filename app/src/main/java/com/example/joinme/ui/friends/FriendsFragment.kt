@@ -25,20 +25,15 @@ import com.google.firebase.database.ValueEventListener
 class FriendsFragment : Fragment() {
     //Firebase
     val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
+    )
     val userRef = database.getReference("users")
-    val emailRef = database.getReference("emails")
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val friendsViewModel: FriendsViewModel by viewModels()
 
     private var _binding: FragmentFriendsBinding? = null
     private val binding get() = _binding!!
-
-    private var user = User("","", "", "", "","", "", mutableListOf())
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,55 +56,10 @@ class FriendsFragment : Fragment() {
     }
 
     fun checkActivityState(friendDetailButton: TextView, friends: Array<Friends>, position: Int) {
-        //Aktivitätsstatus in DB überprüfen
-        userRef.addListenerForSingleValueEvent( object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val activityState = snapshot.child(friends[position].id).child("activityState").value as String
-                if( activityState == true.toString() ) {
-                    friendDetailButton.setBackgroundColor( ContextCompat.getColor( requireContext(), R.color.green ) )
-                }
-                else {
-                    friendDetailButton.setBackgroundColor( ContextCompat.getColor( requireContext(), R.color.grey ) )
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
+        friendsViewModel.checkActivityState(friendDetailButton, friends, position, this)
     }
 
     fun onClickListener(friendDetailButton: TextView, friends: Array<Friends>, position: Int) {
-
-        friendDetailButton.setOnClickListener {
-            userRef.addListenerForSingleValueEvent( object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val location = snapshot.child(friends[position].id).child("location").value as String
-                    val activityName = snapshot.child(friends[position].id).child("activityName").value as String
-                    val activityState = snapshot.child(friends[position].id).child("activityState").value
-
-                    if( activityState == true.toString() ) {
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(friends[position].name)
-                            .setMessage("Aktivität: $activityName\r\n" +
-                                    "Standort: $location")
-                            .setCancelable(true)
-                            .show()
-                    }
-                    else {
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(friends[position].name)
-                            .setMessage("Keine Aktivität aktiv!")
-                            .setCancelable(true)
-                            .show()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-        }
+        friendsViewModel.onClickListener( friendDetailButton, friends, position, this )
     }
 }
