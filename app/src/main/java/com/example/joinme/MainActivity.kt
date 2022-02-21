@@ -72,9 +72,11 @@ class MainActivity : AppCompatActivity() {
         friendsId?.forEach {
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val email = snapshot.child(it).child("email").value as String
+                    val firstName = snapshot.child(it).child("firstName").value as String
+                    val lastName = snapshot.child(it).child("lastName").value as String
+                    val name = "$firstName $lastName"
                     val id = it
-                    sharedViewModel.listOfFriends.add(Friends(id, email))
+                    sharedViewModel.listOfFriends.add(Friends(id, name))
                 }
 
                 override fun onCancelled(error: DatabaseError) {
