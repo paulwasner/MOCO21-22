@@ -40,6 +40,7 @@
             android:layout_marginStart="10dp"
             android:text="Schwimmen gehen"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/listtile_image"
             app:layout_constraintTop_toTopOf="parent" />
 
