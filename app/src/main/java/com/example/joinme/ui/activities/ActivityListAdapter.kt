@@ -16,7 +16,6 @@ class ActivityListAdapter(
 ) :
     ArrayAdapter<ActivityData>(context, R.layout.activities_listtile, activities) {
 
-    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
         val rowView = inflater.inflate(R.layout.activities_listtile, null, true)
@@ -24,8 +23,8 @@ class ActivityListAdapter(
         val activityName = rowView.findViewById<TextView>(R.id.listtile_title)
         val startActivityButton = rowView.findViewById<Button>(R.id.listtile_button)
 
-        fragment.updateButtonOnStartUp( startActivityButton, activities, position )
-        fragment.itemClickListener( startActivityButton, activities, position )
+        fragment.updateButtonOnStartUp(startActivityButton, activities, position)
+        fragment.itemClickListener(startActivityButton, activities, position)
 
         val image = rowView.findViewById<ImageView>(R.id.listtile_image)
         image.clipToOutline = true
@@ -35,4 +34,3 @@ class ActivityListAdapter(
         return rowView
     }
 }
-
