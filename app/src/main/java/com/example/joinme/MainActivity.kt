@@ -2,6 +2,7 @@ package com.example.joinme
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -55,6 +56,9 @@ class MainActivity : AppCompatActivity() {
             sharedViewModel.activityArray.forEach {
                 if( it.activityName == sharedViewModel.user.activityName ) {
                     it.started = true
+                    //Top-Status updaten
+                    val topStatus: TextView = findViewById(R.id.top_status_info)
+                    topStatus.text = it.activityName
                 }
                 Log.d("ACTIVITY0", "${it.activityName}, ${it.started}")
             }

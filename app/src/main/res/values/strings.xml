@@ -9,4 +9,5 @@
     <string name="addFriend">Freund hinzufügen</string>
     <string name="sharing_stop">TEILEN BEENDEN</string>
     <string name="sharing_start">TEILEN STARTEN</string>
+    <string name="no_activity_shared">Du hast noch keine Aktivität geteilt</string>
 </resources>

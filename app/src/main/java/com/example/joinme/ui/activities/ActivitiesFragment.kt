@@ -4,12 +4,12 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -41,6 +41,8 @@ class ActivitiesFragment : Fragment() {
     private var _binding: FragmentActivitiesBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var topInfo: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,6 +58,8 @@ class ActivitiesFragment : Fragment() {
 
         val listView: ListView = root.findViewById(R.id.activity_listview)
         listView.adapter = adapter
+
+        topInfo = root.findViewById(R.id.top_status_info)
 
         if(!checkLocationPermission()) {
             requestLocationPermission()
@@ -103,7 +107,6 @@ class ActivitiesFragment : Fragment() {
     }
 
     fun itemClickListener(button: Button, activities: Array<Activity>, position: Int) {
-
         var lastLocation: Location? = null
         val fusedLocationClient: FusedLocationProviderClient = LocationServices
             .getFusedLocationProviderClient(requireContext())
@@ -127,6 +130,9 @@ class ActivitiesFragment : Fragment() {
                     button.text = getString(R.string.sharing_stop)
                     activities[position].started = true
 
+                    //Top-Status updaten
+                    topInfo.text = activities[position].activityName
+
                     Toast.makeText(context, "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}", Toast.LENGTH_SHORT).show()
                 } else if (checkLocationPermission()) {
                     //Permisson granted aber kein Zugriff auf letzten Standort
@@ -142,8 +148,12 @@ class ActivitiesFragment : Fragment() {
                 //User in DB updaten
                 userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
+                //Button updaten
                 button.text = getString(R.string.sharing_start)
                 activities[position].started = false
+
+                //Top-Status updaten
+                topInfo.text = getString(R.string.no_activity_shared)
             } else {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
                 Toast.makeText(context,"Es wurde bereits eine Aktivität gestartet",Toast.LENGTH_SHORT).show()
