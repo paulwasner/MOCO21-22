@@ -19,10 +19,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     //Firebase
-    val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
-    val userRef = database.getReference("users")
-    val emailRef = database.getReference("emails")
+    private val database = FirebaseDatabase.getInstance(
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
+    )
+    private val userRef = database.getReference("users")
+    private val emailRef = database.getReference("emails")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +44,9 @@ class LoginActivity : AppCompatActivity() {
 
             //Toast, wenn der Benutzer keine Email oder kein Passwort eingegeben hat
             if (emailTxt.isEmpty() || passwordTxt.isEmpty()) {
-                Toast.makeText(
-                    applicationContext,
-                    "Bitte Email und Passwort eingeben",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            else {
+                Toast.makeText(applicationContext, "Bitte Email und Passwort eingeben",
+                    Toast.LENGTH_SHORT).show()
+            } else {
                 //Prüfen ob Nutzer (Email) existiert
                 var uuid: String?
                 emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -61,15 +58,12 @@ class LoginActivity : AppCompatActivity() {
                             if (uuid != null) {
                                 userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
-                                        val getPassword =
-                                            snapshot.child(uuid!!).child("password").value
+                                        val getPassword = snapshot.child(uuid!!).child("password").value
 
                                         //Passwort-Überprüfung
                                         if (getPassword!! == passwordTxt) {
-                                            Toast.makeText(
-                                                applicationContext, "Login erfolgreich!",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            Toast.makeText(applicationContext, "Login erfolgreich!",
+                                                Toast.LENGTH_SHORT).show()
                                             //Aktuellen User holen
                                             val currentUser = User(
                                                 snapshot.child(uuid!!).child("email").value as String?,
@@ -83,37 +77,32 @@ class LoginActivity : AppCompatActivity() {
                                             )
 
                                             //Activities-Fragment öffnen
-                                            Intent(applicationContext, MainActivity::class.java).also {
+                                            Intent(applicationContext, MainActivity::class.java)
+                                                .also {
                                                 //User + UUID mit übergeben
                                                 it.putExtra("currentUser", currentUser)
                                                 it.putExtra("uuid", uuid)
                                                 startActivity(it)
                                             }
                                         } else {
-                                            Toast.makeText(
-                                                applicationContext, "Passwort falsch!",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            Toast.makeText(applicationContext, "Passwort falsch!",
+                                                Toast.LENGTH_SHORT).show()
                                         }
                                     }
+
                                     override fun onCancelled(error: DatabaseError) {
                                         TODO("Not yet implemented")
                                     }
                                 })
                             } else {
                                 //Benutzer existiert nicht
-                                Toast.makeText(
-                                    applicationContext, "Email nicht registriert!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(applicationContext, "Email nicht registriert!",
+                                    Toast.LENGTH_SHORT).show()
                             }
-                        }
-                        else {
+                        } else {
                             //Benutzer existiert nicht
-                            Toast.makeText(
-                                applicationContext, "Email nicht registriert!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(applicationContext, "Email nicht registriert!",
+                                Toast.LENGTH_SHORT).show()
                         }
                     }
 
