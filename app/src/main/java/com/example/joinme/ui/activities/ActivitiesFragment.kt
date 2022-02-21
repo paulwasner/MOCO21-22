@@ -30,10 +30,10 @@ import com.google.firebase.database.FirebaseDatabase
 class ActivitiesFragment : Fragment() {
 
     //Firebase
-    val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
-    val userRef = database.getReference("users")
-    val emailRef = database.getReference("emails")
+    private val database = FirebaseDatabase.getInstance(
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
+    )
+    private val userRef = database.getReference("users")
 
     private lateinit var activitiesViewModel: ActivitiesViewModel
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -48,24 +48,24 @@ class ActivitiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activitiesViewModel =
-            ViewModelProvider(this).get(ActivitiesViewModel::class.java)
-
+        activitiesViewModel = ViewModelProvider(this).get(ActivitiesViewModel::class.java)
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val adapter = activity?.let { ActivityListAdapter(it, sharedViewModel.activityArray, this) }
 
-        val listView: ListView = root.findViewById(R.id.activity_listview)
+        val listView: ListView = view.findViewById(R.id.activity_listview)
         listView.adapter = adapter
 
-        topInfo = root.findViewById(R.id.top_status_info)
+        topInfo = view.findViewById(R.id.top_status_info)
 
-        if(!checkLocationPermission()) {
+        if (!checkLocationPermission()) {
             requestLocationPermission()
         }
-
-        return root
     }
 
     override fun onDestroyView() {
@@ -75,33 +75,37 @@ class ActivitiesFragment : Fragment() {
 
     private fun checkLocationPermission(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+        )
     }
 
     private fun requestLocationPermission() {
-        val requestPermissionLauncher = registerForActivityResult( ActivityResultContracts.RequestPermission() )
-        { isGranted: Boolean ->
-            if (isGranted) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Standort-Zugriff")
-                    .setMessage("Der Standort-Zugriff wurde erteilt.")
-                    .setCancelable(true)
-                    .show()
-            } else {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Standort-Zugriff")
-                    .setMessage("Der Standort-Zugriff wurde verweigert.\r\n" +
-                            "Um eine Aktivität starten zu können, muss der " +
-                            "Standort-Zugriff erlaubt werden.")
-                    .setCancelable(true)
-                    .show()
+        val requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission())
+            { isGranted: Boolean ->
+                if (isGranted) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Standort-Zugriff")
+                        .setMessage("Der Standort-Zugriff wurde erteilt.")
+                        .setCancelable(true)
+                        .show()
+                } else {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Standort-Zugriff")
+                        .setMessage(
+                            "Der Standort-Zugriff wurde verweigert.\r\n" +
+                                    "Um eine Aktivität starten zu können, muss der " +
+                                    "Standort-Zugriff erlaubt werden."
+                        )
+                        .setCancelable(true)
+                        .show()
+                }
             }
-        }
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
-    fun updateButtonOnStartUp( button: Button, activities: Array<Activity>, position: Int ) {
-        if(activities[position].started) {
+    fun updateButtonOnStartUp(button: Button, activities: Array<Activity>, position: Int) {
+        if (activities[position].started) {
             button.text = getString(R.string.sharing_stop)
         }
     }
@@ -112,11 +116,11 @@ class ActivitiesFragment : Fragment() {
             .getFusedLocationProviderClient(requireContext())
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                lastLocation = location
-            }
+            lastLocation = location
+        }
 
         //Update button color
-        if( activities[position].started ) {
+        if (activities[position].started) {
             button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
         }
 
@@ -126,30 +130,62 @@ class ActivitiesFragment : Fragment() {
                     //Aktivität starten, wenn Permission gegeben ist
                     val locationString = "${lastLocation!!.latitude}, ${lastLocation!!.longitude}"
                     val user = sharedViewModel.user
-                    val updatedUser = User(user.email, user.password, user.firstName, user.lastName, locationString, true.toString(), activities[position].activityName, user.friends)
+                    val updatedUser = User(
+                        user.email,
+                        user.password,
+                        user.firstName,
+                        user.lastName,
+                        locationString,
+                        true.toString(),
+                        activities[position].activityName,
+                        user.friends
+                    )
 
                     //User in DB updaten
                     userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
                     //Button + Activity updaten
                     button.text = getString(R.string.sharing_stop)
-                    button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
+                    button.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.green
+                        )
+                    )
                     activities[position].started = true
 
                     //Top-Status updaten
                     topInfo.text = activities[position].activityName
 
-                    Toast.makeText(context, "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else if (checkLocationPermission()) {
                     //Permisson granted aber kein Zugriff auf letzten Standort
-                    Toast.makeText(context,"Der letzte bekannte Standort kann nicht abgerufen werden!",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Der letzte bekannte Standort kann nicht abgerufen werden!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    Toast.makeText(context, "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT)
+                        .show()
                 }
             } else if (activities[position].started) {
                 //Aktivität beenden
                 val user = sharedViewModel.user
-                val updatedUser = User(user.email, user.password, user.firstName, user.lastName, "", false.toString(), "", user.friends)
+                val updatedUser = User(
+                    user.email,
+                    user.password,
+                    user.firstName,
+                    user.lastName,
+                    "",
+                    false.toString(),
+                    "",
+                    user.friends
+                )
 
                 //User in DB updaten
                 userRef.child(sharedViewModel.uuid).setValue(updatedUser)
@@ -163,15 +199,19 @@ class ActivitiesFragment : Fragment() {
                 topInfo.text = getString(R.string.no_activity_shared)
             } else {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
-                Toast.makeText(context,"Es wurde bereits eine Aktivität gestartet",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Es wurde bereits eine Aktivität gestartet",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     //Prüfen, ob bereits eine Aktivität gestartet wurde
-    private fun checkActivityStarted( activities: Array<Activity> ): Boolean {
+    private fun checkActivityStarted(activities: Array<Activity>): Boolean {
         activities.forEach {
-            if(it.started)
+            if (it.started)
                 return true
         }
         return false
