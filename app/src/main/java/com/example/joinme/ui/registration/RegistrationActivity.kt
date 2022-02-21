@@ -18,9 +18,11 @@ class RegistrationActivity : AppCompatActivity() {
     lateinit var binding: ActivityRegistrationBinding
 
     //Firebase
-    val database = FirebaseDatabase.getInstance("https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
-    val userRef = database.getReference("users")
-    val emailRef = database.getReference("emails")
+    private val database = FirebaseDatabase.getInstance(
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
+    )
+    private val userRef = database.getReference("users")
+    private val emailRef = database.getReference("emails")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +42,6 @@ class RegistrationActivity : AppCompatActivity() {
 
 
         registrationButton.setOnClickListener {
-
-            /*Toast.makeText(applicationContext, "Test", Toast.LENGTH_SHORT).show()
-            //Test DB-Write
-            dbRef.setValue("Test")*/
-
             //Benutzerdaten einlesen
             val firstnameTxt = firstname.text.toString()
             val lastnameTxt = lastname.text.toString()
@@ -54,41 +51,39 @@ class RegistrationActivity : AppCompatActivity() {
 
             //Prüfen, ob alle Felder ausgefüllt wurden
             if (firstnameTxt.isEmpty() || lastnameTxt.isEmpty() || emailTxt.isEmpty() ||
-                passwordTxt.isEmpty() || passwordConfTxt.isEmpty() ) {
+                passwordTxt.isEmpty() || passwordConfTxt.isEmpty()
+            ) {
 
                 //Benutzer auf unausgefüllte Felder hinweisen
-                Toast.makeText( applicationContext, "Bitte alle Felder ausfüllen",
-                    Toast.LENGTH_SHORT ).show()
+                Toast.makeText(applicationContext, "Bitte alle Felder ausfüllen",
+                    Toast.LENGTH_SHORT).show()
             }
 
             //Passwörter überprüfen
             else if (passwordTxt != passwordConfTxt) {
-                Toast.makeText( applicationContext, "Passwörter stimmen nicht überein!",
-                    Toast.LENGTH_SHORT ).show()
+                Toast.makeText(applicationContext, "Passwörter stimmen nicht überein!",
+                    Toast.LENGTH_SHORT).show()
             }
 
             //Wenn keine Fehler in der Eingabe vorleigen
             else {
                 //Neues User-Objekt erstellen
-                val user = User( emailTxt, passwordTxt, firstnameTxt, lastnameTxt, "",
-                    "false", "", mutableListOf() )
+                val user = User(emailTxt, passwordTxt, firstnameTxt, lastnameTxt, "",
+                    "false", "", mutableListOf())
 
                 //Prüfen, ob Email registriert
                 emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        if(snapshot.hasChild(user.email!!)) {
+                        if (snapshot.hasChild(user.email!!)) {
                             Toast.makeText(applicationContext, "Email ist bereits registriert!",
                                 Toast.LENGTH_SHORT).show()
-                        }
-                        else if ( !snapshot.hasChild(user.email) ){
+                        } else if (!snapshot.hasChild(user.email)) {
                             //UUID für neuen Nutzer generieren
                             val uuid = UUID.randomUUID().toString()
                             //User in DB einfügen
                             userRef.child(uuid).setValue(user)
-
                             //Zuweisung Email zu UUID für besseres Querrying
                             emailRef.child(emailTxt).setValue(uuid)
-
                             //Benutzer über Registrierung informieren
                             Toast.makeText(applicationContext, "User erfolgreich registriert",
                                 Toast.LENGTH_SHORT).show()
