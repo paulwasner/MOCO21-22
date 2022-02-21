@@ -33,15 +33,15 @@ class ActivitiesFragment : Fragment() {
     private val database = FirebaseDatabase.getInstance(
         "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
     )
-    private val userRef = database.getReference("users")
+    val userRef = database.getReference("users")
 
     private lateinit var activitiesViewModel: ActivitiesViewModel
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var _binding: FragmentActivitiesBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var topInfo: TextView
+    lateinit var topInfo: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,74 +80,7 @@ class ActivitiesFragment : Fragment() {
     }
 
     fun itemClickListener(button: Button, activities: Array<Activity>, position: Int) {
-        var lastLocation: Location? = null
-        val fusedLocationClient: FusedLocationProviderClient = LocationServices
-            .getFusedLocationProviderClient(requireContext())
-
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            lastLocation = location
-        }
-
-        //Update button color
-        if (activities[position].started) {
-            button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
-
-        button.setOnClickListener {
-            if (!activities[position].started && !checkActivityStarted(activities)) {
-                if (activitiesViewModel.checkLocationPermission(requireContext()) && lastLocation != null) {
-                    //Aktivität starten, wenn Permission gegeben ist
-                    val locationString = "${lastLocation!!.latitude}, ${lastLocation!!.longitude}"
-                    val user = sharedViewModel.user
-                    val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
-                        locationString, true.toString(), activities[position].activityName,
-                        user.friends)
-
-                    //User in DB updaten
-                    userRef.child(sharedViewModel.uuid).setValue(updatedUser)
-
-                    //Button + Activity updaten
-                    button.text = getString(R.string.sharing_stop)
-                    button.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.green))
-                    activities[position].started = true
-
-                    //Top-Status updaten
-                    topInfo.text = activities[position].activityName
-
-                    Toast.makeText(context,
-                        "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}",
-                        Toast.LENGTH_SHORT).show()
-                } else if (activitiesViewModel.checkLocationPermission(requireContext())) {
-                    //Permisson granted aber kein Zugriff auf letzten Standort
-                    Toast.makeText(context,
-                        "Der letzte bekannte Standort kann nicht abgerufen werden!",
-                        Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context,
-                        "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
-                }
-            } else if (activities[position].started) {
-                //Aktivität beenden
-                val user = sharedViewModel.user
-                val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
-                    "", false.toString(), "", user.friends)
-
-                //User in DB updaten
-                userRef.child(sharedViewModel.uuid).setValue(updatedUser)
-
-                //Button updaten
-                button.text = getString(R.string.sharing_start)
-                button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey))
-                activities[position].started = false
-
-                //Top-Status updaten
-                topInfo.text = getString(R.string.no_activity_shared)
-            } else {
-                //Wenn bereits eine Aktivität gestartet wurde -> Toast
-                Toast.makeText(context, "Es wurde bereits eine Aktivität gestartet",
-                    Toast.LENGTH_SHORT).show()
-            }
-        }
+        activitiesViewModel.buttonClickListener( button, activities, position, this )
     }
 
     //Prüfen, ob bereits eine Aktivität gestartet wurde

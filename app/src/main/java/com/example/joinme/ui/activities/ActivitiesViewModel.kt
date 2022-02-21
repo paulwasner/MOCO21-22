@@ -3,11 +3,19 @@ package com.example.joinme.ui.activities
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.joinme.R
+import com.example.joinme.datastructure.Activity
+import com.example.joinme.datastructure.User
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ActivitiesViewModel : ViewModel() {
@@ -46,5 +54,84 @@ class ActivitiesViewModel : ViewModel() {
                 }
             }
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+    }
+
+    fun buttonClickListener(button: Button, activities: Array<Activity>, position: Int, fragment: ActivitiesFragment ){
+        var lastLocation: Location? = null
+        val fusedLocationClient: FusedLocationProviderClient = LocationServices
+            .getFusedLocationProviderClient(fragment.requireContext())
+
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            lastLocation = location
+        }
+
+        //Update button color
+        if (activities[position].started) {
+            button.setBackgroundColor(ContextCompat.getColor(fragment.requireContext(), R.color.green))
+        }
+
+        button.setOnClickListener {
+            if (!activities[position].started && !checkActivityStarted(activities)) {
+                if (checkLocationPermission(fragment.requireContext()) && lastLocation != null) {
+                    //Aktivität starten, wenn Permission gegeben ist
+                    val locationString = "${lastLocation!!.latitude}, ${lastLocation!!.longitude}"
+                    val user = fragment.sharedViewModel.user
+                    val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
+                        locationString, true.toString(), activities[position].activityName,
+                        user.friends)
+
+                    //User in DB updaten
+                    fragment.userRef.child(fragment.sharedViewModel.uuid).setValue(updatedUser)
+
+                    //Button + Activity updaten
+                    button.text = fragment.getString(R.string.sharing_stop)
+                    button.setBackgroundColor(ContextCompat.getColor(fragment.requireContext(), R.color.green))
+                    activities[position].started = true
+
+                    //Top-Status updaten
+                    fragment.topInfo.text = activities[position].activityName
+
+                    Toast.makeText(fragment.context,
+                        "Standort: ${lastLocation!!.latitude}, ${lastLocation!!.longitude}",
+                        Toast.LENGTH_SHORT).show()
+                } else if (checkLocationPermission(fragment.requireContext())) {
+                    //Permisson granted aber kein Zugriff auf letzten Standort
+                    Toast.makeText(fragment.context,
+                        "Der letzte bekannte Standort kann nicht abgerufen werden!",
+                        Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(fragment.context,
+                        "Standort-Freigabe nicht erteilt!", Toast.LENGTH_SHORT).show()
+                }
+            } else if (activities[position].started) {
+                //Aktivität beenden
+                val user = fragment.sharedViewModel.user
+                val updatedUser = User(user.email, user.password, user.firstName, user.lastName,
+                    "", false.toString(), "", user.friends)
+
+                //User in DB updaten
+                fragment.userRef.child(fragment.sharedViewModel.uuid).setValue(updatedUser)
+
+                //Button updaten
+                button.text = fragment.getString(R.string.sharing_start)
+                button.setBackgroundColor(ContextCompat.getColor(fragment.requireContext(), R.color.grey))
+                activities[position].started = false
+
+                //Top-Status updaten
+                fragment.topInfo.text = fragment.getString(R.string.no_activity_shared)
+            } else {
+                //Wenn bereits eine Aktivität gestartet wurde -> Toast
+                Toast.makeText(fragment.context, "Es wurde bereits eine Aktivität gestartet",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun checkActivityStarted(activities: Array<Activity>): Boolean {
+        activities.forEach {
+            if (it.started)
+                return true
+        }
+        return false
     }
 }
