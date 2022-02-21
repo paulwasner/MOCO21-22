@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,18 +51,8 @@ class ActivitiesFragment : Fragment() {
 
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val activities =
-            arrayOf(
-                Activity("Schwimmen gehen", false),
-                Activity("Bowlen", false),
-                Activity("Kinobesuch", false),
-                Activity("Park", false),
-                Activity("Grillen", false),
-                Activity("Fitnessstudio", false),
-                Activity("Programmieren", false),
-                Activity("Lernen", false)
-            )
-        val adapter = activity?.let { ActivityListAdapter(it, activities, this) }
+
+        val adapter = activity?.let { ActivityListAdapter(it, sharedViewModel.activityArray, this) }
 
         val listView: ListView = root.findViewById(R.id.activity_listview)
         listView.adapter = adapter
@@ -103,6 +94,12 @@ class ActivitiesFragment : Fragment() {
             }
         }
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+    }
+
+    fun updateButtonOnStartUp( button: Button, activities: Array<Activity>, position: Int ) {
+        if(activities[position].started) {
+            button.text = "Teilen beenden"
+        }
     }
 
     fun itemClickListener(button: Button, activities: Array<Activity>, position: Int) {
@@ -151,8 +148,6 @@ class ActivitiesFragment : Fragment() {
                 //Wenn bereits eine Aktivität gestartet wurde -> Toast
                 Toast.makeText(context,"Es wurde bereits eine Aktivität gestartet",Toast.LENGTH_SHORT).show()
             }
-            //TODO Standort in DB schreiben, bzw. löschen
-            //TODO beim Start bereits gestartete aktivität laden
             //TODO Top-Status aktuallisieren
             //TODO fixe Buttongröße
         }
