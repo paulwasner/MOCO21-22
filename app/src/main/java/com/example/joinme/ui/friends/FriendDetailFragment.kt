@@ -19,7 +19,8 @@ import com.google.firebase.database.ValueEventListener
 class FriendDetailFragment : Fragment() {
     //Firebase
     val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/")
+        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
+    )
     val userRef = database.getReference("users")
     val emailRef = database.getReference("emails")
 
@@ -56,7 +57,7 @@ class FriendDetailFragment : Fragment() {
 
             //Freunde der alten Liste in neue Liste schreiben
             listOfFriends?.forEach {
-                    newFriendsList.add(it)
+                newFriendsList.add(it)
             }
             //Prüfen, ob eingegebener Freund in DB existiert
             when {
@@ -64,57 +65,54 @@ class FriendDetailFragment : Fragment() {
                     Toast.makeText(activity, "Bitte Feld ausfüllen!", Toast.LENGTH_SHORT).show()
                 }
                 newFriend == user.email -> {
-                    Toast.makeText(activity, "Benutzer kann nicht hinzugefügt werden!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Benutzer kann nicht hinzugefügt werden!",
+                        Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     //Prüfen, ob Freund in DB exitiert
-                    emailRef.addListenerForSingleValueEvent(object : ValueEventListener{
+                    emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            if( snapshot.hasChild(newFriend) ) {
+                            if (snapshot.hasChild(newFriend)) {
                                 friendId = snapshot.child(newFriend).value as String
 
                                 //Prüfen, ob Freund bereits in der Liste
-                                if( !newFriendsList.contains(friendId) ) {
+                                if (!newFriendsList.contains(friendId)) {
                                     //Neuen Freund hinzufügen
                                     newFriendsList.add(friendId)
-                                }
-                                else {
+                                } else {
                                     existenceFlag = 1
                                 }
 
                                 //Wenn Freund bereits in der Liste
-                                if( existenceFlag == 1 ) {
-                                    Toast.makeText(activity, "Benutzer bereits hinzugefügt", Toast.LENGTH_SHORT).show()
-                                }
-                                else {
+                                if (existenceFlag == 1) {
+                                    Toast.makeText(activity, "Benutzer bereits hinzugefügt",
+                                        Toast.LENGTH_SHORT).show()
+                                } else {
                                     //User aktuallisieren
-                                    val updatedUser = User(
-                                        user.email, user.password, user.firstName, user.lastName, user.location,
-                                        user.activityState, user.activityName, newFriendsList
-                                    )
+                                    val updatedUser = User( user.email, user.password,
+                                        user.firstName, user.lastName, user.location,
+                                        user.activityState, user.activityName, newFriendsList)
                                     //User mit neuem Freund in DB speichen
                                     userRef.child(uuid).setValue(updatedUser)
                                     //User in SharedViewModel updaten
                                     sharedViewModel.user = updatedUser
                                     //ListOfFriends im sharedViewModel aktuallisieren
                                     sharedViewModel.listOfFriends.add(Friends(friendId, newFriend))
-                                    Toast.makeText(activity, "Freund \"$newFriend\" hinzugefügt", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(activity, "Freund \"$newFriend\" hinzugefügt",
+                                        Toast.LENGTH_SHORT).show()
                                 }
                                 //Aus Fragment heraus wechesln
                                 activity?.onBackPressed()
-
-                                //TODO FreundesListe in FriendsFragment updaten
-                                //TODO In onStart des FriendFragments jeweils Freundesliste updaten + anzeigen
                             } else {
                                 //Freund existiert nicht
-                                Toast.makeText(activity, "Freund exitiert nicht", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity,"Freund exitiert nicht",
+                                    Toast.LENGTH_SHORT).show()
                             }
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             TODO("Not yet implemented")
                         }
-
                     })
                 }
             }
