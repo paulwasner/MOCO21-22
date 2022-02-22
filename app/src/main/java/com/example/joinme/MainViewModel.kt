@@ -1,6 +1,7 @@
 package com.example.joinme
 
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.joinme.datastructure.Friends
 import com.google.firebase.database.DataSnapshot
@@ -38,7 +39,8 @@ class MainViewModel : ViewModel() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(activity.applicationContext, "Fehler: $error",
+                        Toast.LENGTH_SHORT).show()
                 }
             })
         }

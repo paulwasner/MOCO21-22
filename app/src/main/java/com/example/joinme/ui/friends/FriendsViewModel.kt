@@ -1,6 +1,7 @@
 package com.example.joinme.ui.friends
 
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.example.joinme.R
@@ -35,7 +36,7 @@ class FriendsViewModel : ViewModel() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Toast.makeText(fragment.context, "Fehler: $error", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -74,7 +75,7 @@ class FriendsViewModel : ViewModel() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(fragment.context, "Fehler: $error", Toast.LENGTH_SHORT).show()
                 }
             })
         }

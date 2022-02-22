@@ -73,7 +73,7 @@ class FriendDetailViewModel : ViewModel() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+                        Toast.makeText(context, "Fehler: $error", Toast.LENGTH_SHORT).show()
                     }
                 })
             }

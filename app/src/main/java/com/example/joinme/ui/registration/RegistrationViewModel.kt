@@ -66,7 +66,7 @@ class RegistrationViewModel : ViewModel() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    //TODO
+                    Toast.makeText(context, "Fehler: $error", Toast.LENGTH_SHORT).show()
                 }
             })
         }
