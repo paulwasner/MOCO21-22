@@ -1,6 +1,5 @@
 package com.example.joinme.ui.activities
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup

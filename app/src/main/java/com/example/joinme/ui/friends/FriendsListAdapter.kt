@@ -1,6 +1,5 @@
 package com.example.joinme.ui.friends
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ class FriendsListAdapter (
     private val fragment: FriendsFragment
 ) : ArrayAdapter<Friends>(context, R.layout.friends_listtile , friends) {
 
-    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
         val rowView = inflater.inflate(R.layout.friends_listtile, null, true)
@@ -30,7 +28,6 @@ class FriendsListAdapter (
         friendsName.text = friends[position].name
         fragment.checkActivityState( friendDetailButton, friends, position )
         fragment.onClickListener( friendDetailButton, friends, position )
-
 
         return rowView
     }

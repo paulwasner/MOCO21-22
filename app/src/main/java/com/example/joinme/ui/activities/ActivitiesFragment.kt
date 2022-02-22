@@ -1,8 +1,5 @@
 package com.example.joinme.ui.activities
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,23 +7,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.joinme.R
 import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.FragmentActivitiesBinding
 import com.example.joinme.datastructure.Activity
-import com.example.joinme.datastructure.User
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.database.FirebaseDatabase
-
 
 class ActivitiesFragment : Fragment() {
 
@@ -44,7 +31,6 @@ class ActivitiesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 

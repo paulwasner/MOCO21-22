@@ -14,10 +14,14 @@ class SharedViewModel : ViewModel() {
     val userRef = database.getReference("users")
     val emailRef = database.getReference("emails")
 
+    //Eingeloggter User + dessen ID
     var user = User("", "", "", "", "", "", "", mutableListOf())
     var uuid = ""
+
+    //Freundesliste des Users
     var listOfFriends: MutableList<Friends> = mutableListOf()
 
+    //Array der zur Verfügung stehenden Aktivitäten
     var activityArray = arrayOf(
         Activity("Schwimmen gehen", false),
         Activity("Bowlen", false),

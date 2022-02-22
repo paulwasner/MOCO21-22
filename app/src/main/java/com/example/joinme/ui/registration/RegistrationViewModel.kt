@@ -2,8 +2,6 @@ package com.example.joinme.ui.registration
 
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.ActivityRegistrationBinding
 import com.example.joinme.datastructure.User
 import com.google.firebase.database.DataSnapshot

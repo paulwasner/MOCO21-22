@@ -2,8 +2,6 @@ package com.example.joinme.ui.friends
 
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.joinme.R
 import com.example.joinme.datastructure.Friends

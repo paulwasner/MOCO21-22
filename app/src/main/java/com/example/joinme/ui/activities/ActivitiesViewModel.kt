@@ -8,11 +8,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.joinme.R
-import com.example.joinme.SharedViewModel
 import com.example.joinme.datastructure.Activity
 import com.example.joinme.datastructure.User
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -20,11 +17,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ActivitiesViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
 
     fun checkLocationPermission(context: Context): Boolean {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(

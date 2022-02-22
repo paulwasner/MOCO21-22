@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -14,13 +13,6 @@ import com.example.joinme.R
 import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.FragmentFriendsBinding
 import com.example.joinme.datastructure.Friends
-import com.example.joinme.datastructure.User
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-
 
 class FriendsFragment : Fragment() {
 
