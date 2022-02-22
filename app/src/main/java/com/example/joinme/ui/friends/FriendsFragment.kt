@@ -23,14 +23,9 @@ import com.google.firebase.database.ValueEventListener
 
 
 class FriendsFragment : Fragment() {
-    //Firebase
-    val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
-    )
-    val userRef = database.getReference("users")
 
-    private val sharedViewModel: SharedViewModel by activityViewModels()
     private val friendsViewModel: FriendsViewModel by viewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var _binding: FragmentFriendsBinding? = null
     private val binding get() = _binding!!

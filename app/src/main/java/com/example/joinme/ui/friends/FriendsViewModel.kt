@@ -19,8 +19,9 @@ class FriendsViewModel : ViewModel() {
         position: Int,
         fragment: FriendsFragment
     ) {
+        val sharedViewModel = fragment.sharedViewModel
         //Aktivitätsstatus in DB überprüfen
-        fragment.userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        sharedViewModel.userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val activityState =
                     snapshot.child(friends[position].id).child("activityState").value as String
@@ -48,8 +49,9 @@ class FriendsViewModel : ViewModel() {
         position: Int,
         fragment: FriendsFragment
     ) {
+        val sharedViewModel = fragment.sharedViewModel
         friendDetailButton.setOnClickListener {
-            fragment.userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            sharedViewModel.userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val location =
                         snapshot.child(friends[position].id).child("location").value as String

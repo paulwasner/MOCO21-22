@@ -32,7 +32,7 @@ class FriendDetailViewModel : ViewModel() {
             }
             else -> {
                 //Prüfen, ob Freund in DB exitiert
-                fragment.emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                sharedViewModel.emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.hasChild(newFriend)) {
                             friendId = snapshot.child(newFriend).value as String
@@ -55,7 +55,7 @@ class FriendDetailViewModel : ViewModel() {
                                     user.firstName, user.lastName, user.location,
                                     user.activityState, user.activityName, newFriendsList)
                                 //User mit neuem Freund in DB speichen
-                                fragment.userRef.child(uuid).setValue(updatedUser)
+                                sharedViewModel.userRef.child(uuid).setValue(updatedUser)
                                 //User in SharedViewModel updaten
                                 sharedViewModel.user = updatedUser
                                 //ListOfFriends im sharedViewModel aktuallisieren

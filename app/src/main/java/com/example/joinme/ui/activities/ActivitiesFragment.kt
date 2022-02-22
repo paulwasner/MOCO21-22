@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.joinme.R
 import com.example.joinme.SharedViewModel
@@ -29,13 +30,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class ActivitiesFragment : Fragment() {
 
-    //Firebase
-    private val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
-    )
-    val userRef = database.getReference("users")
-
-    private lateinit var activitiesViewModel: ActivitiesViewModel
+    private val activitiesViewModel: ActivitiesViewModel by viewModels()
     val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var _binding: FragmentActivitiesBinding? = null
@@ -48,7 +43,6 @@ class ActivitiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activitiesViewModel = ViewModelProvider(this).get(ActivitiesViewModel::class.java)
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -81,14 +75,5 @@ class ActivitiesFragment : Fragment() {
 
     fun itemClickListener(button: Button, activities: Array<Activity>, position: Int) {
         activitiesViewModel.buttonClickListener( button, activities, position, this )
-    }
-
-    //Prüfen, ob bereits eine Aktivität gestartet wurde
-    private fun checkActivityStarted(activities: Array<Activity>): Boolean {
-        activities.forEach {
-            if (it.started)
-                return true
-        }
-        return false
     }
 }

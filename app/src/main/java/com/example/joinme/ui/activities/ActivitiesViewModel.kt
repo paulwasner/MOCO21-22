@@ -65,7 +65,6 @@ class ActivitiesViewModel : ViewModel() {
     ) {
         val context = fragment.requireContext()
         val sharedViewModel = fragment.sharedViewModel
-        val userRef = fragment.userRef
 
         var lastLocation: Location? = null
         val fusedLocationClient: FusedLocationProviderClient = LocationServices
@@ -91,7 +90,7 @@ class ActivitiesViewModel : ViewModel() {
                         user.friends)
 
                     //User in DB updaten
-                    userRef.child(sharedViewModel.uuid).setValue(updatedUser)
+                    sharedViewModel.userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
                     //Button + Activity updaten
                     button.text = fragment.getString(R.string.sharing_stop)
@@ -120,7 +119,7 @@ class ActivitiesViewModel : ViewModel() {
                     "", false.toString(), "", user.friends)
 
                 //User in DB updaten
-                userRef.child(sharedViewModel.uuid).setValue(updatedUser)
+                sharedViewModel.userRef.child(sharedViewModel.uuid).setValue(updatedUser)
 
                 //Button updaten
                 button.text = fragment.getString(R.string.sharing_start)

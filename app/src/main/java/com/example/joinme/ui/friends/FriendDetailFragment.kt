@@ -18,12 +18,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class FriendDetailFragment : Fragment() {
-    //Firebase
-    private val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
-    )
-    val userRef = database.getReference("users")
-    val emailRef = database.getReference("emails")
 
     private val friendsDetailViewModel: FriendDetailViewModel by viewModels()
     val sharedViewModel: SharedViewModel by activityViewModels()

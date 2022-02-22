@@ -14,6 +14,7 @@ class LoginViewModel : ViewModel() {
 
     fun loginClickListener(binding: ActivityLoginBinding, activity: LoginActivity) {
         val context = activity.applicationContext
+        val sharedViewModel = activity.sharedViewModel
 
         val emailTxt = binding.email.text.toString()
         val passwordTxt = binding.password.text.toString()
@@ -25,14 +26,14 @@ class LoginViewModel : ViewModel() {
         } else {
             //Prüfen ob Nutzer (Email) existiert
             var uuid: String?
-            activity.emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            sharedViewModel.emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.hasChild(emailTxt)) {
                         uuid = snapshot.child(emailTxt).value as String?
 
                         //Wenn User existiert
                         if (uuid != null) {
-                            activity.userRef.addListenerForSingleValueEvent(object :
+                            sharedViewModel.userRef.addListenerForSingleValueEvent(object :
                                 ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
                                     val getPassword = snapshot.child(uuid!!).child("password").value

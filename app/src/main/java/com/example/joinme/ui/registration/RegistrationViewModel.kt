@@ -2,6 +2,8 @@ package com.example.joinme.ui.registration
 
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.ActivityRegistrationBinding
 import com.example.joinme.datastructure.User
 import com.google.firebase.database.DataSnapshot
@@ -15,6 +17,7 @@ class RegistrationViewModel : ViewModel() {
         activity: RegistrationActivity
     ) {
         val context = activity.applicationContext
+        val sharedViewModel = activity.sharedViewModel
 
         //Benutzerdaten einlesen
         val firstnameTxt = binding.firstname.text.toString()
@@ -45,7 +48,7 @@ class RegistrationViewModel : ViewModel() {
             )
 
             //Prüfen, ob Email registriert
-            activity.emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            sharedViewModel.emailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.hasChild(user.email!!)) {
                         Toast.makeText(context, "Email ist bereits registriert!",
@@ -54,9 +57,9 @@ class RegistrationViewModel : ViewModel() {
                         //UUID für neuen Nutzer generieren
                         val uuid = UUID.randomUUID().toString()
                         //User in DB einfügen
-                        activity.userRef.child(uuid).setValue(user)
+                        sharedViewModel.userRef.child(uuid).setValue(user)
                         //Zuweisung Email zu UUID für besseres Querrying
-                        activity.emailRef.child(emailTxt).setValue(uuid)
+                        sharedViewModel.emailRef.child(emailTxt).setValue(uuid)
                         //Benutzer über Registrierung informieren
                         Toast.makeText(context, "User erfolgreich registriert",
                             Toast.LENGTH_SHORT).show()

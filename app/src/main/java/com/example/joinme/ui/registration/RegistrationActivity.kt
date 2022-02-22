@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.joinme.R
+import com.example.joinme.SharedViewModel
 import com.example.joinme.databinding.ActivityRegistrationBinding
 import com.example.joinme.datastructure.User
 import com.google.firebase.database.DataSnapshot
@@ -17,14 +18,8 @@ import java.util.*
 class RegistrationActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityRegistrationBinding
-    val registrationViewModel: RegistrationViewModel by viewModels()
-
-    //Firebase
-    private val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
-    )
-    val userRef = database.getReference("users")
-    val emailRef = database.getReference("emails")
+    private val registrationViewModel: RegistrationViewModel by viewModels()
+    val sharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
