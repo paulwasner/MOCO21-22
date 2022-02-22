@@ -19,13 +19,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
-    //Firebase
-    val database = FirebaseDatabase.getInstance(
-        "https://joinme-f75c5-default-rtdb.europe-west1.firebasedatabase.app/"
-    )
-    val userRef = database.getReference("users")
 
-    private val sharedViewModel: SharedViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
+    val sharedViewModel: SharedViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,45 +40,15 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        //Aktuellen Nutzer + ID in SharedViewModel speichern
         val currentUser = intent.extras!!.get("currentUser") as User
         val uuid = intent.extras!!.get("uuid") as String
         sharedViewModel.user = currentUser
         sharedViewModel.uuid = uuid
 
         //ActivityList updaten
-        updateTopStatus()
+        mainViewModel.updateTopStatus(this)
         //Freundesliste laden
-        val friendsId = sharedViewModel.user.friends
-
-        friendsId?.forEach {
-            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val firstName = snapshot.child(it).child("firstName").value as String
-                    val lastName = snapshot.child(it).child("lastName").value as String
-                    val name = "$firstName $lastName"
-                    val id = it
-                    sharedViewModel.listOfFriends.add(Friends(id, name))
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-        }
-
+        mainViewModel.loadFriendsList(this)
     }
-
-    private fun updateTopStatus() {
-        if (sharedViewModel.user.activityState == true.toString()) {
-            sharedViewModel.activityArray.forEach {
-                if (it.activityName == sharedViewModel.user.activityName) {
-                    it.started = true
-                    //Top-Status updaten
-                    val topStatus: TextView = findViewById(R.id.top_status_info)
-                    topStatus.text = it.activityName
-                }
-            }
-        }
-    }
-
 }
